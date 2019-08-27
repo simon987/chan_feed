@@ -14,7 +14,7 @@ from chan import CHANS
 from post_process import post_process
 from util import logger, Web
 
-MONITORING = True
+MONITORING = False
 
 
 class ChanScanner:
@@ -106,7 +106,7 @@ class ChanState:
             return cur.fetchone() is not None
 
     def has_new_posts(self, thread, helper):
-        with sqlite3.connect(self._db) as conn:
+        with sqlite3.connect(self._db, timeout=5000) as conn:
             cur = conn.cursor()
             cur.execute(
                 "SELECT last_modified FROM threads WHERE thread=? AND chan=?",
@@ -118,7 +118,7 @@ class ChanState:
             return False
 
     def mark_thread_as_visited(self, thread, helper):
-        with sqlite3.connect(self._db) as conn:
+        with sqlite3.connect(self._db, timeout=5000) as conn:
             conn.execute(
                 "INSERT INTO threads (thread, last_modified, chan) "
                 "VALUES (?,?,?) "
@@ -149,7 +149,7 @@ def publish(item, board, helper):
 
     chan_channel.basic_publish(
         exchange='chan',
-        routing_key="%d.%s.%s" % (helper.db_id, item_type, board),
+        routing_key="%s.%s.%s" % (chan, item_type, board),
         body=json.dumps(item)
     )
 
