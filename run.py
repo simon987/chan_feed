@@ -179,6 +179,14 @@ def publish(item, board, helper):
         except Exception as e:
             logger.debug(traceback.format_exc())
             logger.error(str(e))
+            connect()
+
+
+def connect():
+    global chan_channel
+    rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+    chan_channel = rabbit.channel()
+    chan_channel.exchange_declare(exchange="chan", exchange_type="topic")
 
 
 if __name__ == "__main__":
@@ -199,9 +207,7 @@ if __name__ == "__main__":
     publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper))
     publish_thread.start()
 
-    rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
-    chan_channel = rabbit.channel()
-    chan_channel.exchange_declare(exchange="chan", exchange_type="topic")
+    connect()
 
     s = ChanScanner(chan_helper)
     while True:
