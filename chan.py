@@ -149,7 +149,7 @@ CHANS = {
         "/res/",
         "/src/",
         [
-            "a", "b", "f", "feels", "i", "k", "mu", "pol", "sewers",
+            "a", "b", "f", "yu", "i", "k", "mu", "pol", "sewers",
             "sg", "t", "vg"
         ]
     ),
@@ -162,16 +162,6 @@ CHANS = {
         [
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
         ]
-    ),
-    "1chan": ChanHelper(
-        6,
-        "https://www.1chan.net/",
-        "https://www.1chan.net/",
-        "/res/",
-        "/src/",
-        [
-            "rails"
-        ],
     ),
     "2chhk": RussianChanHelper(
         7,
