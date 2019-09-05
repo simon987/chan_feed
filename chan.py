@@ -1,4 +1,7 @@
 import json
+from urllib.parse import urljoin
+
+from bs4 import BeautifulSoup
 
 from post_process import get_links_from_body
 
@@ -20,6 +23,95 @@ class ChanHelper:
 
     def posts_url(self, board, thread):
         return "%s%s%s%d.json" % (self._base_url, board, self._thread_path, thread)
+
+    def board_hash(self, board):
+        return str((self.boards.index(board) + 1) * 10000)
+
+    @staticmethod
+    def item_id(item):
+        raise NotImplementedError
+
+    def item_unique_id(self, item, board):
+        return int(self.board_hash(board) + str(self.item_id(item)))
+
+    @staticmethod
+    def thread_mtime(thread):
+        raise NotImplementedError
+
+    def item_urls(self, item, board):
+        raise NotImplementedError
+
+    @staticmethod
+    def item_type(item):
+        raise NotImplementedError
+
+    @staticmethod
+    def parse_threads_list(content):
+        raise NotImplementedError
+
+    @staticmethod
+    def parse_thread(r):
+        raise NotImplementedError
+
+
+class HtmlChanHelper(ChanHelper):
+
+    def threads_url(self, board):
+        return "%s%s/" % (self._base_url, board)
+
+    def posts_url(self, board, thread):
+        return "%s%s%s%d.html" % (self._base_url, board, self._thread_path, thread)
+
+    @staticmethod
+    def item_id(item):
+        return item["id"]
+
+    def item_urls(self, item, board):
+        return []
+
+    @staticmethod
+    def item_type(item):
+        return item["type"]
+
+    @staticmethod
+    def thread_mtime(thread):
+        return -1
+
+    def parse_threads_list(self, r):
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        threads = []
+
+        for threadEl in soup.find_all("div", attrs={"class": "opCell"}):
+            threads.append({
+                "id": int(threadEl.get("id")),
+            })
+
+        next_url = soup.find("a", attrs={"id": "linkNext"})
+        if next_url:
+            return threads, urljoin(r.url, next_url.get("href"))
+        return threads, None
+
+    @staticmethod
+    def parse_thread(r):
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        op_el = soup.find("div", attrs={"class": "innerOP"})
+        yield {
+            "id": int(soup.find("div", attrs={"class": "opCell"}).get("id")),
+            "type": "thread",
+            "html": str(op_el),
+        }
+
+        for post_el in soup.find_all("div", attrs={"class": "postCell"}):
+            yield {
+                "id": int(post_el.get("id")),
+                "type": "post",
+                "html": str(post_el),
+            }
+
+
+class JsonChanHelper(ChanHelper):
 
     @staticmethod
     def item_id(item):
@@ -46,32 +138,34 @@ class ChanHelper:
         return thread["last_modified"]
 
     @staticmethod
-    def parse_threads_list(content):
-        j = json.loads(content)
+    def parse_threads_list(r):
+        j = json.loads(r.text)
+        threads = []
         for page in j:
             for thread in page["threads"]:
-                yield thread
+                threads.append(thread)
+        return threads, None
 
     @staticmethod
-    def parse_thread(content):
-        j = json.loads(content)
+    def parse_thread(r):
+        j = json.loads(r.text)
         return j["posts"]
 
 
-class RussianChanHelper(ChanHelper):
+class RussianJsonChanHelper(ChanHelper):
 
     @staticmethod
     def item_id(item):
         return int(item["num"])
 
     @staticmethod
-    def parse_threads_list(content):
-        j = json.loads(content)
-        return j["threads"]
+    def parse_threads_list(r):
+        j = json.loads(r.text)
+        return j["threads"], None
 
     @staticmethod
-    def parse_thread(content):
-        j = json.loads(content)
+    def parse_thread(r):
+        j = json.loads(r.text)
         for thread in j["threads"]:
             for post in thread["posts"]:
                 yield post
@@ -92,9 +186,6 @@ class RussianChanHelper(ChanHelper):
         elif "subject" in item and item["subject"]:
             urls.update(get_links_from_body(item["subject"]))
 
-        if urls:
-            print(list(urls))
-
         for file in item["files"]:
             urls.add(self._base_url + file["path"])
 
@@ -102,7 +193,7 @@ class RussianChanHelper(ChanHelper):
 
 
 CHANS = {
-    "4chan": ChanHelper(
+    "4chan": JsonChanHelper(
         1,
         "https://a.4cdn.org/",
         "https://i.4cdn.org/",
@@ -119,7 +210,7 @@ CHANS = {
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
         ]
     ),
-    "lainchan": ChanHelper(
+    "lainchan": JsonChanHelper(
         2,
         "https://lainchan.org/",
         "https://lainchan.org/",
@@ -127,11 +218,11 @@ CHANS = {
         "/src/",
         [
             "λ", "diy", "sec", "tech", "inter", "lit", "music", "vis",
-            "hum", "drg", "zzz", "layer" "q", "r", "cult", "psy",
-            "mega", "random"
+            "hum", "drg", "zzz", "layer", "q", "r", "cult", "psy",
+            "mega",
         ]
     ),
-    "uboachan": ChanHelper(
+    "uboachan": JsonChanHelper(
         3,
         "https://uboachan.net/",
         "https://uboachan.net/",
@@ -142,7 +233,7 @@ CHANS = {
             "ig", "2", "ot", "hikki", "cc", "x", "sugg"
         ]
     ),
-    "22chan": ChanHelper(
+    "22chan": JsonChanHelper(
         4,
         "https://22chan.org/",
         "https://22chan.org/",
@@ -153,7 +244,7 @@ CHANS = {
             "sg", "t", "vg"
         ]
     ),
-    "wizchan": ChanHelper(
+    "wizchan": JsonChanHelper(
         5,
         "https://wizchan.org/",
         "https://wizchan.org/",
@@ -163,7 +254,18 @@ CHANS = {
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
         ]
     ),
-    "2chhk": RussianChanHelper(
+    # TODO
+    "1chan": ChanHelper(
+        6,
+        "https://www.1chan.net/",
+        "https://www.1chan.net/",
+        "/res/",
+        "/src/",
+        [
+            "rails"
+        ],
+    ),
+    "2chhk": RussianJsonChanHelper(
         7,
         "https://2ch.hk/",
         "https://2ch.hk/",
@@ -181,5 +283,16 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ],
-    )
+    ),
+    # TODO
+    "endchan": HtmlChanHelper(
+        8,
+        "https://endchan.net/",
+        "https://endchan.net/",
+        "/res/",
+        "/.media/",
+        [
+            "yuri"
+        ],
+    ),
 }

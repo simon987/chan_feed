@@ -25,22 +25,31 @@ class ChanScanner:
 
     def _threads(self, board):
         r = self.web.get(self.helper.threads_url(board))
-        if r.status_code == 200:
-            return self.helper.parse_threads_list(r.text)
-        return []
+        if r.status_code != 200:
+            return []
+
+        while True:
+            threads, next_url = self.helper.parse_threads_list(r)
+            for thread in threads:
+                yield thread
+            if not next_url:
+                break
+            r = self.web.get(next_url)
+            if r.status_code != 200:
+                break
 
     def _fetch_posts(self, board, thread):
         r = self.web.get(self.helper.posts_url(board, thread))
         if r.status_code == 200:
-            return self.helper.parse_thread(r.text)
+            return self.helper.parse_thread(r)
         return []
 
     def _posts(self, board):
         for thread in self._threads(board):
-            if self.state.has_new_posts(thread, self.helper):
+            if self.state.has_new_posts(thread, self.helper, board):
                 for post in self._fetch_posts(board, self.helper.item_id(thread)):
                     yield post
-                self.state.mark_thread_as_visited(thread, self.helper)
+                self.state.mark_thread_as_visited(thread, self.helper, board)
 
     def all_posts(self):
         for board in self.helper.boards:
@@ -50,9 +59,9 @@ class ChanScanner:
 
 def once(func):
     def wrapper(item, board, helper):
-        if not state.has_visited(helper.item_id(item), helper):
+        if not state.has_visited(helper.item_unique_id(item, board), helper):
             func(item, board, helper)
-            state.mark_visited(helper.item_id(item), helper)
+            state.mark_visited(helper.item_unique_id(item, board), helper)
 
     return wrapper
 
@@ -100,26 +109,30 @@ class ChanState:
             )
             return cur.fetchone() is not None
 
-    def has_new_posts(self, thread, helper):
+    def has_new_posts(self, thread, helper, board):
+        mtime = helper.thread_mtime(thread)
+        if mtime == -1:
+            return True
+
         with sqlite3.connect(self._db, timeout=5000) as conn:
             cur = conn.cursor()
             cur.execute(
                 "SELECT last_modified FROM threads WHERE thread=? AND chan=?",
-                (helper.item_id(thread), helper.db_id)
+                (helper.item_unique_id(thread, board), helper.db_id)
             )
             row = cur.fetchone()
             if not row or helper.thread_mtime(thread) != row[0]:
                 return True
             return False
 
-    def mark_thread_as_visited(self, thread, helper):
+    def mark_thread_as_visited(self, thread, helper, board):
         with sqlite3.connect(self._db, timeout=5000) as conn:
             conn.execute(
                 "INSERT INTO threads (thread, last_modified, chan) "
                 "VALUES (?,?,?) "
                 "ON CONFLICT (thread, chan) "
                 "DO UPDATE SET last_modified=?",
-                (helper.item_id(thread), helper.thread_mtime(thread), helper.db_id,
+                (helper.item_unique_id(thread, board), helper.thread_mtime(thread), helper.db_id,
                  helper.thread_mtime(thread))
             )
             conn.commit()
@@ -142,24 +155,30 @@ def publish(item, board, helper):
     item_type = helper.item_type(item)
     post_process(item, board, helper)
 
-    chan_channel.basic_publish(
-        exchange='chan',
-        routing_key="%s.%s.%s" % (chan, item_type, board),
-        body=json.dumps(item)
-    )
+    while True:
+        try:
+            chan_channel.basic_publish(
+                exchange='chan',
+                routing_key="%s.%s.%s" % (chan, item_type, board),
+                body=json.dumps(item)
+            )
 
-    if MONITORING:
-        distance = datetime.utcnow() - datetime.fromtimestamp(helper.item_mtime(item))
-        monitoring.log([{
-            "measurement": chan,
-            "time": str(datetime.utcnow()),
-            "tags": {
-                "board": board
-            },
-            "fields": {
-                "distance": distance.total_seconds()
-            }
-        }])
+            if MONITORING:
+                distance = datetime.utcnow() - datetime.fromtimestamp(helper.item_mtime(item))
+                monitoring.log([{
+                    "measurement": chan,
+                    "time": str(datetime.utcnow()),
+                    "tags": {
+                        "board": board
+                    },
+                    "fields": {
+                        "distance": distance.total_seconds()
+                    }
+                }])
+            break
+        except Exception as e:
+            logger.debug(traceback.format_exc())
+            logger.error(str(e))
 
 
 if __name__ == "__main__":

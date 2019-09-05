@@ -3,3 +3,4 @@ requests[socks]
 stem
 influxdb
 pika
+bs4

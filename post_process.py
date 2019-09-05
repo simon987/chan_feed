@@ -4,8 +4,8 @@ LINK_RE = re.compile(r"(https?://[\w\-_.]+\.[a-z]{2,4}([^\s<'\"]*|$))")
 
 
 def post_process(item, board, helper):
-    item["_v"] = 1.2
-    item["_id"] = helper.item_id(item)
+    item["_v"] = 1.3
+    item["_id"] = helper.item_unique_id(item, board)
 
     item["_board"] = board
     item["_chan"] = helper.db_id
