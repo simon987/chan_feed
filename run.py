@@ -23,27 +23,22 @@ class ChanScanner:
         self.helper = helper
         self.state = ChanState()
 
-    def _fetch_threads(self, board):
+    def _threads(self, board):
         r = self.web.get(self.helper.threads_url(board))
         if r.status_code == 200:
-            return r.json()
+            return self.helper.parse_threads_list(r.text)
         return []
 
     def _fetch_posts(self, board, thread):
         r = self.web.get(self.helper.posts_url(board, thread))
         if r.status_code == 200:
-            return r.json()
-        return {"posts": []}
-
-    def _threads(self, board):
-        for page in self._fetch_threads(board):
-            for thread in page["threads"]:
-                yield thread
+            return self.helper.parse_thread(r.text)
+        return []
 
     def _posts(self, board):
-        for thread in sorted(self._threads(board), key=lambda x: x["no"]):
+        for thread in self._threads(board):
             if self.state.has_new_posts(thread, self.helper):
-                for post in sorted(self._fetch_posts(board, thread["no"])["posts"], key=lambda x: x["no"]):
+                for post in self._fetch_posts(board, self.helper.item_id(thread)):
                     yield post
                 self.state.mark_thread_as_visited(thread, self.helper)
 
@@ -55,9 +50,9 @@ class ChanScanner:
 
 def once(func):
     def wrapper(item, board, helper):
-        if not state.has_visited(item["no"], helper):
+        if not state.has_visited(helper.item_id(item), helper):
             func(item, board, helper)
-            state.mark_visited(item["no"], helper)
+            state.mark_visited(helper.item_id(item), helper)
 
     return wrapper
 
@@ -110,10 +105,10 @@ class ChanState:
             cur = conn.cursor()
             cur.execute(
                 "SELECT last_modified FROM threads WHERE thread=? AND chan=?",
-                (thread["no"], helper.db_id)
+                (helper.item_id(thread), helper.db_id)
             )
             row = cur.fetchone()
-            if not row or thread["last_modified"] != row[0]:
+            if not row or helper.thread_mtime(thread) != row[0]:
                 return True
             return False
 
@@ -124,8 +119,8 @@ class ChanState:
                 "VALUES (?,?,?) "
                 "ON CONFLICT (thread, chan) "
                 "DO UPDATE SET last_modified=?",
-                (thread["no"], thread["last_modified"], helper.db_id,
-                 thread["last_modified"])
+                (helper.item_id(thread), helper.thread_mtime(thread), helper.db_id,
+                 helper.thread_mtime(thread))
             )
             conn.commit()
 
@@ -144,7 +139,7 @@ def publish_worker(queue: Queue, helper):
 
 @once
 def publish(item, board, helper):
-    item_type = "thread" if "sub" in item else "post"
+    item_type = helper.item_type(item)
     post_process(item, board, helper)
 
     chan_channel.basic_publish(
@@ -154,9 +149,9 @@ def publish(item, board, helper):
     )
 
     if MONITORING:
-        distance = datetime.utcnow() - datetime.fromtimestamp(item["time"])
+        distance = datetime.utcnow() - datetime.fromtimestamp(helper.item_mtime(item))
         monitoring.log([{
-            "measurement": helper.db_id,
+            "measurement": chan,
             "time": str(datetime.utcnow()),
             "tags": {
                 "board": board
