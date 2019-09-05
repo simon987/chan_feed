@@ -199,7 +199,7 @@ CHANS = {
         "https://i.4cdn.org/",
         "/thread/",
         "/",
-        [
+        (
             "a", "b", "c", "d", "e", "f", "g", "gif", "h", "hr",
             "k", "m", "o", "p", "r", "s", "t", "u", "v", "vg",
             "vr", "w", "wg", "i", "ic", "r9k", "s4s", "vip", "qa",
@@ -208,7 +208,7 @@ CHANS = {
             "gd", "hc", "his", "int", "jp", "lit", "mlp", "mu", "n",
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
-        ]
+        )
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -216,11 +216,11 @@ CHANS = {
         "https://lainchan.org/",
         "/res/",
         "/src/",
-        [
+        (
             "λ", "diy", "sec", "tech", "inter", "lit", "music", "vis",
             "hum", "drg", "zzz", "layer", "q", "r", "cult", "psy",
             "mega",
-        ]
+        )
     ),
     "uboachan": JsonChanHelper(
         3,
@@ -228,10 +228,10 @@ CHANS = {
         "https://uboachan.net/",
         "/res/",
         "/src/",
-        [
+        (
             "yn", "yndd", "fg", "yume", "o", "lit", "media", "og",
             "ig", "2", "ot", "hikki", "cc", "x", "sugg"
-        ]
+        )
     ),
     "22chan": JsonChanHelper(
         4,
@@ -239,10 +239,10 @@ CHANS = {
         "https://22chan.org/",
         "/res/",
         "/src/",
-        [
+        (
             "a", "b", "f", "yu", "i", "k", "mu", "pol", "sewers",
             "sg", "t", "vg"
-        ]
+        )
     ),
     "wizchan": JsonChanHelper(
         5,
@@ -250,9 +250,9 @@ CHANS = {
         "https://wizchan.org/",
         "/res/",
         "/src/",
-        [
+        (
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
-        ]
+        )
     ),
     # TODO
     "1chan": ChanHelper(
@@ -261,9 +261,9 @@ CHANS = {
         "https://www.1chan.net/",
         "/res/",
         "/src/",
-        [
+        (
             "rails"
-        ],
+        ),
     ),
     "2chhk": RussianJsonChanHelper(
         7,
@@ -271,7 +271,7 @@ CHANS = {
         "https://2ch.hk/",
         "/res/",
         "/src/",
-        [
+        (
             "d", "b", "o", "soc", "media", "r", "api", "rf", "int",
             "po", "news", "hry", "au", "bi", "biz", "bo", "c", "em",
             "fa", "fiz", "fl", "ftb", "hh", "hi", "me", "mg", "mlp",
@@ -282,17 +282,26 @@ CHANS = {
             "web", "bg", "cg", "gsg", "ruvn", "tes", "v", "vg", "wr",
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
-        ],
+        ),
     ),
-    # TODO
     "endchan": HtmlChanHelper(
         8,
         "https://endchan.net/",
         "https://endchan.net/",
         "/res/",
         "/.media/",
-        [
-            "yuri"
-        ],
+        (
+            "art", "film", "oekaki", "draw",
+            "adv", "r9k", "hope", "spoon",
+            "a", "am", "amr", "l", "monster", "m", "2hu", "animach",
+            "b", "webm", "v", "vvv", "vidya", "tg", "otomad", "mu",
+            "metal", "tv", "f", "clipuploads",
+            "4", "deutsch", "j", "jp" "italia", "fr", "kc", "kurenai", "int",
+            "intl", "lang", "librejp", "rzabczan", "55chan",
+            "pol", "pdfs", "his", "ggrevols", "horror", "aethism",
+            "tech", "g", "markov", "os", "agdg", "cyber", "HTML", "2600",
+            "ausneets", "qanonresearch", "polru", "yuri", "christianity",
+            "kc", "rapport", "news", "brit", "webm",
+        ),
     ),
 }
