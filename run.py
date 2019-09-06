@@ -164,7 +164,7 @@ def publish(item, board, helper):
             )
 
             if MONITORING:
-                distance = datetime.utcnow() - datetime.fromtimestamp(helper.item_mtime(item))
+                distance = datetime.utcnow() - datetime.utcfromtimestamp(helper.item_mtime(item))
                 monitoring.log([{
                     "measurement": chan,
                     "time": str(datetime.utcnow()),

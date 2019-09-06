@@ -325,7 +325,7 @@ CHANS = {
             "pol", "pdfs", "his", "ggrevols", "horror", "aethism",
             "tech", "g", "markov", "os", "agdg", "cyber", "HTML", "2600",
             "ausneets", "qanonresearch", "polru", "yuri", "christianity",
-            "kc", "rapport", "news", "brit", "webm",
+            "kc", "rapport", "news", "brit", "webm", "4chon"
         ),
     ),
 }
