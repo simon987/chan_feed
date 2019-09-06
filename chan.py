@@ -31,6 +31,10 @@ class ChanHelper:
     def item_id(item):
         raise NotImplementedError
 
+    @staticmethod
+    def item_mtime(item):
+        raise NotImplementedError
+
     def item_unique_id(self, item, board):
         return int(self.board_hash(board) + str(self.item_id(item)))
 
@@ -77,6 +81,10 @@ class HtmlChanHelper(ChanHelper):
     def thread_mtime(thread):
         return -1
 
+    @staticmethod
+    def item_id(item):
+        return 0  # TODO
+
     def parse_threads_list(self, r):
         soup = BeautifulSoup(r.text, "html.parser")
 
@@ -116,6 +124,10 @@ class JsonChanHelper(ChanHelper):
     @staticmethod
     def item_id(item):
         return item["no"]
+
+    @staticmethod
+    def item_id(item):
+        return item["time"]
 
     def item_urls(self, item, board):
         urls = set()
@@ -157,6 +169,10 @@ class RussianJsonChanHelper(ChanHelper):
     @staticmethod
     def item_id(item):
         return int(item["num"])
+
+    @staticmethod
+    def item_mtime(item):
+        return item["timestamp"]
 
     @staticmethod
     def parse_threads_list(r):
