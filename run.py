@@ -25,7 +25,7 @@ class ChanScanner:
 
     def _threads(self, board):
         r = self.web.get(self.helper.threads_url(board))
-        if r.status_code != 200:
+        if not r or r.status_code != 200:
             return []
 
         while True:
@@ -35,12 +35,12 @@ class ChanScanner:
             if not next_url:
                 break
             r = self.web.get(next_url)
-            if r.status_code != 200:
+            if not r or r.status_code != 200:
                 break
 
     def _fetch_posts(self, board, thread):
         r = self.web.get(self.helper.posts_url(board, thread))
-        if r.status_code == 200:
+        if r and r.status_code == 200:
             return self.helper.parse_thread(r)
         return []
 

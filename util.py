@@ -1,6 +1,7 @@
 import logging
 import sys
 import time
+import traceback
 from datetime import datetime
 from logging import FileHandler, StreamHandler
 
@@ -47,17 +48,32 @@ class Web:
 
     @rate_limit(1 / 2)  # TODO: per chan rate limit?
     def get(self, url, **kwargs):
-        r = self.session.get(url, **kwargs)
-        logger.debug("GET %s <%d>" % (url, r.status_code))
-        if self.monitoring:
-            self.monitoring.log([{
-                "measurement": "web",
-                "time": str(datetime.utcnow()),
-                "fields": {
-                    "status_code": r.status_code
-                },
-                "tags": {
-                    "ok": r.status_code == 200
-                },
-            }])
-        return r
+        try:
+            r = self.session.get(url, **kwargs)
+            logger.debug("GET %s <%d>" % (url, r.status_code))
+            if self.monitoring:
+                self.monitoring.log([{
+                    "measurement": "web",
+                    "time": str(datetime.utcnow()),
+                    "fields": {
+                        "status_code": r.status_code
+                    },
+                    "tags": {
+                        "ok": r.status_code == 200
+                    },
+                }])
+            return r
+        except Exception as e:
+            logger.error(str(e) + traceback.format_exc())
+            if self.monitoring:
+                self.monitoring.log([{
+                    "measurement": "web",
+                    "time": str(datetime.utcnow()),
+                    "fields": {
+                        "status_code": 0
+                    },
+                    "tags": {
+                        "ok": False
+                    },
+                }])
+                return None
