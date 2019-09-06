@@ -1,3 +1,4 @@
+import datetime
 import json
 from urllib.parse import urljoin
 
@@ -13,7 +14,10 @@ class ChanHelper:
         self._image_url = image_url
         self._thread_path = thread_path
         self._image_path = image_path
-        self.boards = boards
+        self._boards = boards
+
+    def boards(self):
+        return [b for b in self._boards if not b.startswith("_")]
 
     def image_url(self, board, tim, extension):
         return "%s%s%s%s%s" % (self._image_url, board, self._image_path, tim, extension)
@@ -25,7 +29,7 @@ class ChanHelper:
         return "%s%s%s%d.json" % (self._base_url, board, self._thread_path, thread)
 
     def board_hash(self, board):
-        return str((self.boards.index(board) + 1) * 10000)
+        return str((self._boards.index(board) + 1) * 10000)
 
     @staticmethod
     def item_id(item):
@@ -82,7 +86,11 @@ class HtmlChanHelper(ChanHelper):
         return -1
 
     @staticmethod
-    def item_id(item):
+    def item_mtime(item):
+        if item is None:
+            return int(datetime.datetime.now().timestamp())
+        print(item)
+        exit(0)
         return 0  # TODO
 
     def parse_threads_list(self, r):
@@ -126,7 +134,7 @@ class JsonChanHelper(ChanHelper):
         return item["no"]
 
     @staticmethod
-    def item_id(item):
+    def item_mtime(item):
         return item["time"]
 
     def item_urls(self, item, board):
@@ -234,8 +242,8 @@ CHANS = {
         "/src/",
         (
             "λ", "diy", "sec", "tech", "inter", "lit", "music", "vis",
-            "hum", "drg", "zzz", "layer", "q", "r", "cult", "psy",
-            "mega",
+            "hum", "drg", "zzz", "layer", "q", "r", "_cult", "_psy",
+            "_mega",
         )
     ),
     "uboachan": JsonChanHelper(

@@ -52,7 +52,7 @@ class ChanScanner:
                 self.state.mark_thread_as_visited(thread, self.helper, board)
 
     def all_posts(self):
-        for board in self.helper.boards:
+        for board in self.helper.boards():
             for post in self._posts(board):
                 yield post, board
 

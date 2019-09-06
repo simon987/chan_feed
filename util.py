@@ -55,6 +55,9 @@ class Web:
                 "time": str(datetime.utcnow()),
                 "fields": {
                     "status_code": r.status_code
-                }
+                },
+                "tags": {
+                    "ok": r.status_code == 200
+                },
             }])
         return r

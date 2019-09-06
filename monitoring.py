@@ -1,4 +1,8 @@
+import traceback
+
 from influxdb import InfluxDBClient
+
+from util import logger
 
 client = InfluxDBClient("localhost", 8086, "root", "root", "chan_feed")
 
@@ -15,4 +19,8 @@ def init():
 
 
 def log(event):
-    client.write_points(event)
+    try:
+        client.write_points(event)
+    except Exception as e:
+        logger.debug(traceback.format_exc())
+        logger.error(str(e))
