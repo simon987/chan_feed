@@ -47,23 +47,23 @@ def image_meta(url, url_idx, web):
     try:
         f = BytesIO(buf)
         im = Image.open(f)
-    except Exception as e:
-        logger.warning("exception during image open: " + str(e))
-        return None
 
-    meta = {
-        "url": url_idx,
-        "size": len(buf),
-        "width": im.width,
-        "height": im.height,
-        "sha1": hashlib.sha1(buf).hexdigest(),
-        "md5": hashlib.md5(buf).hexdigest(),
-        "crc32": format(zlib.crc32(buf), "x"),
-        "dhash": b64hash(imagehash.dhash(im, hash_size=12), 18),
-        "phash": b64hash(imagehash.phash(im, hash_size=12), 18),
-        "ahash": b64hash(imagehash.average_hash(im, hash_size=12), 18),
-        "whash": b64hash(imagehash.whash(im, hash_size=8), 8),
-    }
+        meta = {
+            "url": url_idx,
+            "size": len(buf),
+            "width": im.width,
+            "height": im.height,
+            "sha1": hashlib.sha1(buf).hexdigest(),
+            "md5": hashlib.md5(buf).hexdigest(),
+            "crc32": format(zlib.crc32(buf), "x"),
+            "dhash": b64hash(imagehash.dhash(im, hash_size=12), 18),
+            "phash": b64hash(imagehash.phash(im, hash_size=12), 18),
+            "ahash": b64hash(imagehash.average_hash(im, hash_size=12), 18),
+            "whash": b64hash(imagehash.whash(im, hash_size=8), 8),
+        }
+    except Exception as e:
+        logger.warning("exception during image post processing: " + str(e))
+        return None
 
     del im, r, buf
 
