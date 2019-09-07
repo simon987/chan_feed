@@ -1,4 +1,3 @@
-import datetime
 import json
 from urllib.parse import urljoin
 
@@ -8,13 +7,14 @@ from post_process import get_links_from_body
 
 
 class ChanHelper:
-    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards):
+    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards, rps=None):
         self.db_id = db_id
         self._base_url = base_url
         self._image_url = image_url
         self._thread_path = thread_path
         self._image_path = image_path
         self._boards = boards
+        self.rps = rps
 
     def boards(self):
         return [b for b in self._boards if not b.startswith("_")]
@@ -87,8 +87,6 @@ class HtmlChanHelper(ChanHelper):
 
     @staticmethod
     def item_mtime(item):
-        print(item)
-        exit(0)
         return 0  # TODO
 
     def parse_threads_list(self, r):
@@ -230,7 +228,8 @@ CHANS = {
             "gd", "hc", "his", "int", "jp", "lit", "mlp", "mu", "n",
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
-        )
+        ),
+        rps=2/3
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -242,7 +241,8 @@ CHANS = {
             "λ", "diy", "sec", "tech", "inter", "lit", "music", "vis",
             "hum", "drg", "zzz", "layer", "q", "r", "_cult", "_psy",
             "_mega",
-        )
+        ),
+        rps=1 / 60
     ),
     "uboachan": JsonChanHelper(
         3,
@@ -253,7 +253,8 @@ CHANS = {
         (
             "yn", "yndd", "fg", "yume", "o", "lit", "media", "og",
             "ig", "2", "ot", "hikki", "cc", "x", "sugg"
-        )
+        ),
+        rps=1 / 120
     ),
     "22chan": JsonChanHelper(
         4,
@@ -264,7 +265,8 @@ CHANS = {
         (
             "a", "b", "f", "yu", "i", "k", "mu", "pol", "sewers",
             "sg", "t", "vg"
-        )
+        ),
+        rps=1 / 120
     ),
     "wizchan": JsonChanHelper(
         5,
@@ -274,7 +276,8 @@ CHANS = {
         "/src/",
         (
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
-        )
+        ),
+        rps=1 / 30
     ),
     # TODO
     "1chan": ChanHelper(
@@ -286,6 +289,7 @@ CHANS = {
         (
             "rails"
         ),
+        rps=1 / 600
     ),
     "2chhk": RussianJsonChanHelper(
         7,
@@ -305,6 +309,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
+        rps=1
     ),
     "endchan": HtmlChanHelper(
         8,
@@ -325,5 +330,6 @@ CHANS = {
             "ausneets", "qanonresearch", "polru", "yuri", "christianity",
             "kc", "rapport", "news", "brit", "webm", "4chon"
         ),
+        rps=1
     ),
 }

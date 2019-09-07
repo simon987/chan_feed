@@ -42,14 +42,21 @@ def rate_limit(per_second):
 
 
 class Web:
-    def __init__(self, monitoring):
+    def __init__(self, monitoring, rps=1/2):
         self.session = requests.Session()
+        self._rps = rps
         self.monitoring = monitoring
 
-    @rate_limit(1 / 2)  # TODO: per chan rate limit?
+        @rate_limit(self._rps)
+        def _get(url, **kwargs):
+            return self.session.get(url, **kwargs)
+
+        self._get = _get
+
     def get(self, url, **kwargs):
         try:
-            r = self.session.get(url, **kwargs)
+            r = self._get(url, **kwargs)
+
             logger.debug("GET %s <%d>" % (url, r.status_code))
             if self.monitoring:
                 self.monitoring.log([{

@@ -19,7 +19,7 @@ MONITORING = True
 
 class ChanScanner:
     def __init__(self, helper):
-        self.web = Web(monitoring if MONITORING else None)
+        self.web = Web(monitoring if MONITORING else None, rps=helper.rps)
         self.helper = helper
         self.state = ChanState()
 
@@ -140,7 +140,7 @@ class ChanState:
 
 def publish_worker(queue: Queue, helper):
     channel = connect()
-    web = Web(monitoring if MONITORING else None)
+    web = Web(monitoring if MONITORING else None, rps=helper.rps)
 
     while True:
         try:
