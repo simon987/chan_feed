@@ -87,8 +87,6 @@ class HtmlChanHelper(ChanHelper):
 
     @staticmethod
     def item_mtime(item):
-        if item is None:
-            return int(datetime.datetime.now().timestamp())
         print(item)
         exit(0)
         return 0  # TODO
@@ -114,12 +112,12 @@ class HtmlChanHelper(ChanHelper):
 
         op_el = soup.find("div", attrs={"class": "innerOP"})
         yield {
-            "id": int(soup.find("div", attrs={"class": "opCell"}).get("id")),
+            "id": int(soup.find("div", class_="opCell").get("id")),
             "type": "thread",
             "html": str(op_el),
         }
 
-        for post_el in soup.find_all("div", attrs={"class": "postCell"}):
+        for post_el in soup.find_all("div", class_="postCell"):
             yield {
                 "id": int(post_el.get("id")),
                 "type": "post",

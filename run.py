@@ -14,7 +14,7 @@ from chan import CHANS
 from post_process import post_process
 from util import logger, Web
 
-MONITORING = False
+MONITORING = True
 
 
 class ChanScanner:
@@ -58,9 +58,9 @@ class ChanScanner:
 
 
 def once(func):
-    def wrapper(item, board, helper):
+    def wrapper(item, board, helper, channel, web):
         if not state.has_visited(helper.item_unique_id(item, board), helper):
-            func(item, board, helper)
+            func(item, board, helper, channel, web)
             state.mark_visited(helper.item_unique_id(item, board), helper)
 
     return wrapper
@@ -139,10 +139,13 @@ class ChanState:
 
 
 def publish_worker(queue: Queue, helper):
+    channel = connect()
+    web = Web(monitoring if MONITORING else None)
+
     while True:
         try:
             item, board = queue.get()
-            publish(item, board, helper)
+            publish(item, board, helper, channel, web)
 
         except Exception as e:
             logger.error(str(e) + ": " + traceback.format_exc())
@@ -151,16 +154,16 @@ def publish_worker(queue: Queue, helper):
 
 
 @once
-def publish(item, board, helper):
+def publish(item, board, helper, channel, web):
     item_type = helper.item_type(item)
-    post_process(item, board, helper)
+    post_process(item, board, helper, web)
 
     while True:
         try:
-            chan_channel.basic_publish(
+            channel.basic_publish(
                 exchange='chan',
                 routing_key="%s.%s.%s" % (chan, item_type, board),
-                body=json.dumps(item)
+                body=json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
             )
 
             if MONITORING:
@@ -179,14 +182,14 @@ def publish(item, board, helper):
         except Exception as e:
             logger.debug(traceback.format_exc())
             logger.error(str(e))
-            connect()
+            channel = connect()
 
 
 def connect():
-    global chan_channel
     rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
-    chan_channel = rabbit.channel()
-    chan_channel.exchange_declare(exchange="chan", exchange_type="topic")
+    channel = rabbit.channel()
+    channel.exchange_declare(exchange="chan", exchange_type="topic")
+    return channel
 
 
 if __name__ == "__main__":
@@ -204,10 +207,9 @@ if __name__ == "__main__":
     state = ChanState()
 
     publish_q = Queue()
-    publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper))
-    publish_thread.start()
-
-    connect()
+    for _ in range(5):
+        publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper))
+        publish_thread.start()
 
     s = ChanScanner(chan_helper)
     while True:

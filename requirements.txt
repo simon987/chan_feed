@@ -1,3 +1,5 @@
+imagehash
+Pillow
 requests
 requests[socks]
 stem
