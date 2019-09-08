@@ -241,6 +241,6 @@ CHANS = {
             "_bm", "de", "ic", "rp", "rpi", "v", "w", "tg",
             "alt", "b", "g", "pkmn", "yuri", "fl", "mu", "sugg"
         ),
-        rps=1
+        rps=1/20
     ),
 }
