@@ -2,6 +2,7 @@ from chan.alokal_json import AlokalJsonChanHelper
 from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
+from chan.fchan_html import FChanHtmlChanHelper
 from chan.json import JsonChanHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
@@ -106,7 +107,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=1/10
+        rps=1/5
     ),
     "endchan": EndchanHtmlChanHelper(
         8,
@@ -267,5 +268,16 @@ CHANS = {
             "toy", "v", "x", "34", "e", "f", "h"
         ),
         rps=1/20,
+    ),
+    "fchan": FChanHtmlChanHelper(
+        21,
+        "http://fchan.us/",
+        "http://fchan.us/",
+        "/res/",
+        "/src/",
+        (
+            "f", "m", "h", "s", "toon", "a", "ah", "c", "artist", "crit", "b"
+        ),
+        rps=1/60,
     ),
 }

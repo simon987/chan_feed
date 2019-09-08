@@ -53,10 +53,7 @@ class DesuChanHtmlChanHelper(ChanHelper):
     def parse_thread(r):
         soup = BeautifulSoup(r.text, "html.parser")
 
-        op_el = None
-        for div in soup.find_all("div", id=lambda tid: tid and tid[1:].isdigit()):
-            op_el = div
-            break
+        op_el = soup.find("div", id=lambda tid: tid and tid[1:].isdigit())
 
         for post_el in op_el.find_all("table", recursive=False):
             label = post_el.find("label")
