@@ -235,7 +235,22 @@ class AlokalJsonChanHelper(JsonChanHelper):
         elif "sub" in item and item["sub"]:
             urls.update(get_links_from_body(item["sub"]))
         if "fsize" in item and item["fsize"]:
-            urls.add(self._base_url + self._image_path + item["tim"] + "/" + str(item["no"]) + item["ext"])
+            urls.add(self._image_url + self._image_path + item["tim"] + "/" + str(item["no"]) + item["ext"])
+
+        return list(urls)
+
+
+class SynchJsonChanHelper(JsonChanHelper):
+
+    def item_urls(self, item, board):
+        urls = set()
+
+        if "com" in item and item["com"]:
+            urls.update(get_links_from_body(item["com"]))
+        elif "sub" in item and item["sub"]:
+            urls.update(get_links_from_body(item["sub"]))
+        if "fsize" in item and item["fsize"]:
+            urls.add(self._image_url + self._image_path + item["tim"] + item["ext"])
 
         return list(urls)
 
@@ -394,5 +409,17 @@ CHANS = {
             "jp", "drive"
         ),
         rps=1 / 60
+    ),
+    "synch": SynchJsonChanHelper(
+        12,
+        "https://syn-ch.ru/",
+        "https://cdn.syn-ch.ru/",
+        "/res/",
+        "src",
+        (
+            "b", "d", "_r", "a", "_g", "mlp", "mu", "_tv", "vg",
+            "_wh", "old", "test"
+        ),
+        rps=1 / 120
     )
 }
