@@ -40,7 +40,7 @@ def b64hash(imhash, bcount):
 def image_meta(url, url_idx, web):
     r = web.get(url)
     if not r:
-        logger.warning("")
+        logger.warning("Could not download image")
         return None
     buf = r.content
 

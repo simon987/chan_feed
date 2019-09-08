@@ -160,7 +160,7 @@ class JsonChanHelper(ChanHelper):
         try:
             j = json.loads(r.text)
         except JSONDecodeError:
-            logger.warning("JSONDecodeError for %s:" % (r.url, ))
+            logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
             return [], None
 
@@ -191,7 +191,7 @@ class RussianJsonChanHelper(ChanHelper):
         try:
             j = json.loads(r.text)
         except JSONDecodeError:
-            logger.warning("JSONDecodeError for %s:" % (r.url, ))
+            logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
             return [], None
         return j["threads"], None
@@ -225,6 +225,22 @@ class RussianJsonChanHelper(ChanHelper):
         return list(urls)
 
 
+class AlokalJsonChanHelper(JsonChanHelper):
+
+    def item_urls(self, item, board):
+        urls = set()
+
+        if "com" in item and item["com"]:
+            urls.update(get_links_from_body(item["com"]))
+        elif "sub" in item and item["sub"]:
+            urls.update(get_links_from_body(item["sub"]))
+        if "fsize" in item and item["fsize"]:
+            urls.add(self._base_url + self._image_path + item["tim"] + "/" + str(item["no"]) + item["ext"])
+
+        return list(urls)
+
+
+
 CHANS = {
     "4chan": JsonChanHelper(
         1,
@@ -242,7 +258,7 @@ CHANS = {
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
         ),
-        rps=3/2
+        rps=3 / 2
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -355,5 +371,17 @@ CHANS = {
             "a", "b", "g", "38"
         ),
         rps=1 / 600
+    ),
+    "alokal": AlokalJsonChanHelper(
+        10,
+        "https://alokal.eu/",
+        "https://alokal.eu/",
+        "/",
+        "src/",
+        (
+            "b", "pol", "sk", "int", "slav", "s", "gv", "mda", "sp",
+            "fit", "had",
+        ),
+        rps=1 / 4
     )
 }
