@@ -1,4 +1,5 @@
 from chan.alokal_json import AlokalJsonChanHelper
+from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
 from chan.json import JsonChanHelper
@@ -213,5 +214,22 @@ CHANS = {
             "moe",
         ),
         rps=1
-    )
+    ),
+    "desuchan": DesuChanHtmlChanHelper(
+        17,
+        "https://desuchan.net/",
+        "https://desuchan.net/",
+        "/res/",
+        "/src/",
+        (
+            "bananas", "boku", "dawa", "desu", "jum", "kashira", "md",
+            "otousama", "ro", "unyuu", "yakult", "a", "c", "h", "_loli",
+            "moonspeak", "nagato", "nij", "nipa", "touhou", "tr", "yan",
+            "yan", "vn", "do", "fi", "lit", "o", "pro", "tech", "v", "vic",
+            "arrrrr", "brocastan", "gar", "gif", "media", "ot", "r", "w",
+            "sandbox", "sugg"
+        ),
+        rps=1/10
+    ),
+
 }
