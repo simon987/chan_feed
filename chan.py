@@ -1,9 +1,11 @@
 import json
+from json import JSONDecodeError
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
 from post_process import get_links_from_body
+from util import logger
 
 
 class ChanHelper:
@@ -155,7 +157,13 @@ class JsonChanHelper(ChanHelper):
 
     @staticmethod
     def parse_threads_list(r):
-        j = json.loads(r.text)
+        try:
+            j = json.loads(r.text)
+        except JSONDecodeError:
+            logger.warning("JSONDecodeError for %s:" % (r.url, ))
+            logger.warning(r.text)
+            return [], None
+
         threads = []
         for page in j:
             for thread in page["threads"]:
@@ -180,7 +188,12 @@ class RussianJsonChanHelper(ChanHelper):
 
     @staticmethod
     def parse_threads_list(r):
-        j = json.loads(r.text)
+        try:
+            j = json.loads(r.text)
+        except JSONDecodeError:
+            logger.warning("JSONDecodeError for %s:" % (r.url, ))
+            logger.warning(r.text)
+            return [], None
         return j["threads"], None
 
     @staticmethod
@@ -207,7 +220,7 @@ class RussianJsonChanHelper(ChanHelper):
             urls.update(get_links_from_body(item["subject"]))
 
         for file in item["files"]:
-            urls.add(self._base_url + file["path"])
+            urls.add(self._base_url.rstrip("/") + file["path"])
 
         return list(urls)
 
@@ -309,7 +322,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=1
+        rps=10
     ),
     "endchan": HtmlChanHelper(
         8,
