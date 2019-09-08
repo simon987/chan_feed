@@ -10,7 +10,7 @@ from threading import Thread
 import pika
 
 import monitoring
-from chan import CHANS
+from chan.chan import CHANS
 from post_process import post_process
 from util import logger, Web
 

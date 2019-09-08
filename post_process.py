@@ -3,6 +3,7 @@ import hashlib
 import re
 import zlib
 from io import BytesIO
+from urllib.parse import urljoin
 
 import imagehash
 from PIL import Image
@@ -10,6 +11,7 @@ from PIL import Image
 from util import logger
 
 LINK_RE = re.compile(r"(https?://[\w\-_.]+\.[a-z]{2,4}([^\s<'\"]*|$))")
+HTML_HREF_RE = re.compile(r"href=\"([^\"]+)\"")
 
 IMAGE_FILETYPES = (
     # :orig for twitter cdn
@@ -71,7 +73,7 @@ def image_meta(url, url_idx, web):
 
 
 def post_process(item, board, helper, web):
-    item["_v"] = 1.4
+    item["_v"] = 1.5
     item["_id"] = helper.item_unique_id(item, board)
 
     item["_board"] = board
@@ -97,6 +99,14 @@ def get_links_from_body(body):
         if is_external(url):
             result.append(url)
 
+    return result
+
+
+def get_links_from_html_body(body, base_url):
+    result = []
+    for match in HTML_HREF_RE.finditer(body):
+        url = match.group(1)
+        result.append(urljoin(base_url, url))
     return result
 
 
