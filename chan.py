@@ -421,5 +421,16 @@ CHANS = {
             "_wh", "old", "test"
         ),
         rps=1 / 120
+    ),
+    "tahta": JsonChanHelper(
+        13,
+        "https://tahta.ch/",
+        "https://tahta.ch/",
+        "/res/",
+        "/src/",
+        (
+            "b", "g", "s", "v"
+        ),
+        rps=1 / 300
     )
 }
