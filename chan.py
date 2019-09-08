@@ -383,5 +383,16 @@ CHANS = {
             "fit", "had",
         ),
         rps=1 / 4
+    ),
+    "gnfos": JsonChanHelper(
+        11,
+        "https://gnfos.com/",
+        "https://gnfos.com/",
+        "/res/",
+        "/src/",
+        (
+            "jp", "drive"
+        ),
+        rps=1 / 60
     )
 }
