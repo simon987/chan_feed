@@ -60,8 +60,6 @@ class DesuChanHtmlChanHelper(ChanHelper):
 
         for post_el in op_el.find_all("table", recursive=False):
             label = post_el.find("label")
-            if not label:
-                print(post_el)
             *_, time = label.children
             yield {
                 "id": int(post_el.find("td", attrs={"class", "reply"}).get("id")[5:]),

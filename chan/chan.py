@@ -6,6 +6,7 @@ from chan.json import JsonChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.russian_json import RussianJsonChanHelper
 from chan.synch_json import SynchJsonChanHelper
+from chan.tgchan_html import TgChanHtmlChanHelper
 
 CHANS = {
     "4chan": JsonChanHelper(
@@ -243,4 +244,15 @@ CHANS = {
         ),
         rps=1/20
     ),
+    "tgchan": TgChanHtmlChanHelper(
+        19,
+        "https://tgchan.org/kusaba/",
+        "https://tgchan.org/kusaba/",
+        "/res/",
+        "/src/",
+        (
+            "draw", "meep", "quest", "questdis", "tg", "icons",
+        ),
+        rps=1,
+    )
 }
