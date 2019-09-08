@@ -242,7 +242,7 @@ CHANS = {
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
         ),
-        rps=2/3
+        rps=3/2
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -322,7 +322,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=10
+        rps=1
     ),
     "endchan": HtmlChanHelper(
         8,
@@ -345,4 +345,15 @@ CHANS = {
         ),
         rps=1
     ),
+    "38chan": JsonChanHelper(
+        9,
+        "http://38chan.net/",
+        "http://38chan.net/",
+        "/res/",
+        "/src/",
+        (
+            "a", "b", "g", "38"
+        ),
+        rps=1 / 600
+    )
 }
