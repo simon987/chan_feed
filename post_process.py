@@ -81,7 +81,7 @@ def post_process(item, board, helper, web):
 
     item["_urls"] = helper.item_urls(item, board)
 
-    item["_img"] = [image_meta(url, i, web) for i, url in enumerate(item["_urls"]) if _is_image(url)]
+    # item["_img"] = [image_meta(url, i, web) for i, url in enumerate(item["_urls"]) if _is_image(url)]
 
     return item
 

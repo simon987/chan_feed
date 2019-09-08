@@ -231,5 +231,16 @@ CHANS = {
         ),
         rps=1/10
     ),
-
+    "aurorachan": DesuChanHtmlChanHelper(
+        18,
+        "http://aurorachan.net/",
+        "http://aurorachan.net/",
+        "/res/",
+        "/src/",
+        (
+            "_bm", "de", "ic", "rp", "rpi", "v", "w", "tg",
+            "alt", "b", "g", "pkmn", "yuri", "fl", "mu", "sugg"
+        ),
+        rps=1
+    ),
 }
