@@ -47,7 +47,7 @@ class ChanScanner:
     def _posts(self, board):
         for thread in self._threads(board):
             if self.state.has_new_posts(thread, self.helper, board):
-                for post in self._fetch_posts(board, self.helper.item_id(thread)):
+                for post in self._fetch_posts(board, thread):
                     yield post
                 self.state.mark_thread_as_visited(thread, self.helper, board)
 

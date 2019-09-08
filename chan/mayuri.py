@@ -72,4 +72,4 @@ class MayuriChanHelper(ChanHelper):
         return "%sboards/1" % (self._base_url,)
 
     def posts_url(self, board, thread):
-        return "%sthreads/%d" % (self._base_url, thread)
+        return "%sthreads/%d" % (self._base_url, self.item_id(thread))

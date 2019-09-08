@@ -13,7 +13,7 @@ class EndchanHtmlChanHelper(ChanHelper):
         return "%s%s/" % (self._base_url, board)
 
     def posts_url(self, board, thread):
-        return "%s%s%s%d.html" % (self._base_url, board, self._thread_path, thread)
+        return "%s%s%s%d.html" % (self._base_url, board, self._thread_path, self.item_id(thread))
 
     @staticmethod
     def item_id(item):

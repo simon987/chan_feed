@@ -3,6 +3,7 @@ from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
 from chan.json import JsonChanHelper
+from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.russian_json import RussianJsonChanHelper
 from chan.synch_json import SynchJsonChanHelper
@@ -105,7 +106,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=1
+        rps=1/10
     ),
     "endchan": EndchanHtmlChanHelper(
         8,
@@ -126,7 +127,7 @@ CHANS = {
             "ausneets", "qanonresearch", "polru", "yuri", "christianity",
             "kc", "rapport", "news", "brit", "webm", "4chon"
         ),
-        rps=1
+        rps=1/2
     ),
     "38chan": JsonChanHelper(
         9,
@@ -149,7 +150,7 @@ CHANS = {
             "b", "pol", "sk", "int", "slav", "s", "gv", "mda", "sp",
             "fit", "had",
         ),
-        rps=1 / 4
+        rps=1 / 30
     ),
     "gnfos": JsonChanHelper(
         11,
@@ -214,7 +215,7 @@ CHANS = {
         (
             "moe",
         ),
-        rps=1
+        rps=1/20
     ),
     "desuchan": DesuChanHtmlChanHelper(
         17,
@@ -253,6 +254,18 @@ CHANS = {
         (
             "draw", "meep", "quest", "questdis", "tg", "icons",
         ),
-        rps=1,
-    )
+        rps=1/600,
+    ),
+    "lolnada": LolNadaHtmlChanHelper(
+        20,
+        "https://lolnada.org/",
+        "https://lolnada.org/",
+        "/hilo/",
+        "/src/",
+        (
+            "b", "a", "aw", "cgl", "dw", "int", "qt", "sad", "t",
+            "toy", "v", "x", "34", "e", "f", "h"
+        ),
+        rps=1/20,
+    ),
 }

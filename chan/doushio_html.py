@@ -13,7 +13,7 @@ class DoushioHtmlChanHelper(ChanHelper):
         return "%s%s/" % (self._base_url, board)
 
     def posts_url(self, board, thread):
-        return "%s%s/%d" % (self._base_url, board, thread)
+        return "%s%s/%d" % (self._base_url, board, self.item_id(thread))
 
     @staticmethod
     def item_id(item):
