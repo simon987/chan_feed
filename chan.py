@@ -159,6 +159,9 @@ class JsonChanHelper(ChanHelper):
     def parse_threads_list(r):
         try:
             j = json.loads(r.text)
+            if len(j) == 0 or "threads" not in j[0]:
+                logger.warning("No threads in response for %s: %s" % (r.url, r.text,))
+                return [], None
         except JSONDecodeError:
             logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
@@ -432,5 +435,16 @@ CHANS = {
             "b", "g", "s", "v"
         ),
         rps=1 / 300
-    )
+    ),
+    "awsumchan": JsonChanHelper(
+        14,
+        "https://awsumchan.org/",
+        "https://awsumchan.org/",
+        "/res/",
+        "/src/",
+        (
+            "an", "aw", "cr", "fi", "ra", "au", "ga", "he", "sp"
+        ),
+        rps=1 / 600
+    ),
 }
