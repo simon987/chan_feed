@@ -28,20 +28,22 @@ class DoushioHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def thread_mtime(thread):
-        return -1
+        return thread["omit"]
 
     @staticmethod
     def item_mtime(item):
         return item["time"]
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 
         for threadEl in soup.find_all("section"):
+            omit = threadEl.find("span", class_="omit")
             threads.append({
                 "id": int(threadEl.get("id")),
+                "omit": int(omit.text.split(" ")[0]) if omit else 0
             })
 
         next_url = soup.find("link", attrs={"rel": "next"})
@@ -51,7 +53,7 @@ class DoushioHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("section")
         for post_el in op_el.find_all("article"):

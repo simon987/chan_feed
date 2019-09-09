@@ -32,7 +32,7 @@ class LolNadaHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def thread_mtime(thread):
-        return -1
+        return thread["omit"]
 
     @staticmethod
     def item_mtime(item):
@@ -44,9 +44,11 @@ class LolNadaHtmlChanHelper(ChanHelper):
         threads = []
 
         for threadEl in soup.find_all("div", class_="hilo"):
+            omit = threadEl.find("span", class_="omitted")
             threads.append({
                 "id": int(threadEl.get("data-id")),
                 "url": threadEl.find("a", class_="post_no").get("href"),
+                "omit": int(omit.get("data-omitidos")) if omit else 0
             })
 
         for form in soup.find_all("form"):

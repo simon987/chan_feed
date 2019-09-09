@@ -10,7 +10,7 @@ from chan.desuchan_html import DesuChanHtmlChanHelper
 class TgChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 
@@ -27,7 +27,7 @@ class TgChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("form", id="delform")
 

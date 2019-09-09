@@ -12,7 +12,7 @@ class ChanHelper:
         self.rps = rps
 
     def boards(self):
-        return [b for b in self._boards if not b.startswith("_")]
+        return [b.replace("\\_", "_") for b in self._boards if not b.startswith("_")]
 
     def image_url(self, board, tim, extension):
         return "%s%s%s%s%s" % (self._image_url, board, self._image_path, tim, extension)

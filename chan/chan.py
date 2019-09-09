@@ -9,6 +9,7 @@ from chan.mayuri import MayuriChanHelper
 from chan.russian_json import RussianJsonChanHelper
 from chan.synch_json import SynchJsonChanHelper
 from chan.tgchan_html import TgChanHtmlChanHelper
+from chan.zerochan_html import ZerochanHtmlChanHelper
 
 CHANS = {
     "4chan": JsonChanHelper(
@@ -75,7 +76,7 @@ CHANS = {
         (
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
         ),
-        rps=1 / 30
+        rps=1 / 60
     ),
     # TODO
     # "1chan": ChanHelper(
@@ -107,7 +108,7 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=1/5
+        rps=1 / 5
     ),
     "endchan": EndchanHtmlChanHelper(
         8,
@@ -128,7 +129,7 @@ CHANS = {
             "ausneets", "qanonresearch", "polru", "yuri", "christianity",
             "kc", "rapport", "news", "brit", "webm", "4chon"
         ),
-        rps=1/2
+        rps=1 / 10
     ),
     "38chan": JsonChanHelper(
         9,
@@ -151,7 +152,7 @@ CHANS = {
             "b", "pol", "sk", "int", "slav", "s", "gv", "mda", "sp",
             "fit", "had",
         ),
-        rps=1 / 30
+        rps=1 / 60
     ),
     "gnfos": JsonChanHelper(
         11,
@@ -216,7 +217,7 @@ CHANS = {
         (
             "moe",
         ),
-        rps=1/20
+        rps=1 / 20
     ),
     "desuchan": DesuChanHtmlChanHelper(
         17,
@@ -232,7 +233,7 @@ CHANS = {
             "arrrrr", "brocastan", "gar", "gif", "media", "ot", "r", "w",
             "sandbox", "sugg"
         ),
-        rps=1/10
+        rps=1 / 30
     ),
     "aurorachan": DesuChanHtmlChanHelper(
         18,
@@ -244,7 +245,7 @@ CHANS = {
             "_bm", "de", "ic", "rp", "rpi", "v", "w", "tg",
             "alt", "b", "g", "pkmn", "yuri", "fl", "mu", "sugg"
         ),
-        rps=1/20
+        rps=1 / 20
     ),
     "tgchan": TgChanHtmlChanHelper(
         19,
@@ -255,7 +256,7 @@ CHANS = {
         (
             "draw", "meep", "quest", "questdis", "tg", "icons",
         ),
-        rps=1/600,
+        rps=1 / 600,
     ),
     "lolnada": LolNadaHtmlChanHelper(
         20,
@@ -267,7 +268,7 @@ CHANS = {
             "b", "a", "aw", "cgl", "dw", "int", "qt", "sad", "t",
             "toy", "v", "x", "34", "e", "f", "h"
         ),
-        rps=1/20,
+        rps=1 / 60,
     ),
     "fchan": FChanHtmlChanHelper(
         21,
@@ -278,6 +279,22 @@ CHANS = {
         (
             "f", "m", "h", "s", "toon", "a", "ah", "c", "artist", "crit", "b"
         ),
-        rps=1/60,
+        rps=1 / 60,
     ),
+    "0chan": ZerochanHtmlChanHelper(
+        22,
+        "https://0-chan.ru/",
+        "https://0-chan.ru/",
+        "",
+        "/assets/",
+        (
+            "0", "0ch", "0chan", "1chan", "2ch", "3dprintor", "8", "\\_b", "a",
+            "an", "asylum", "bb", "bo", "c", "copypaste", "dog", "draw", "e",
+            "elite", "eot", "ergrgergre", "fido", "fur", "g", "game", "hui", "huz",
+            "hw", "ithub", "m", "meta", "naotoudigu", "nhc", "nullchan", "parasha",
+            "poligon", "postach", "psih", "r", "rm", "s", "shrek", "shy", "t",
+            "test", "tlp", "tmp", "tv", "vg", "vipe", "wh", "xikkadvach", "ynet"
+        ),
+        rps=1 / 5
+    )
 }

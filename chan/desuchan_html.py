@@ -27,20 +27,22 @@ class DesuChanHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def thread_mtime(thread):
-        return -1  # TODO: Parse the 'X posts, Y images' span
+        return thread["omit"]
 
     @staticmethod
     def item_mtime(item):
         return item["time"]
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 
         for threadEl in soup.find_all("div", id=lambda tid: tid and tid[1:].isdigit()):
+            omit = threadEl.find("span", class_="omittedposts")
             threads.append({
                 "id": int(threadEl.get("id")[1:]),
+                "omit": int(omit.text.split(" ")[0]) if omit else 0
             })
 
         for form in soup.find_all("form"):
@@ -51,7 +53,7 @@ class DesuChanHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("div", id=lambda tid: tid and tid[1:].isdigit())
 

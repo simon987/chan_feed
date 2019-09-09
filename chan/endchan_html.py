@@ -28,20 +28,22 @@ class EndchanHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def thread_mtime(thread):
-        return -1
+        return thread["omit"]
 
     @staticmethod
     def item_mtime(item):
         return item["time"]
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 
         for threadEl in soup.find_all("div", attrs={"class": "opCell"}):
+            omit = threadEl.find("div", class_="labelOmission")
             threads.append({
                 "id": int(threadEl.get("id")),
+                "omit": int(omit.text.split(" ")[0]) if omit else 0
             })
 
         next_url = soup.find("a", attrs={"id": "linkNext"})
@@ -51,7 +53,7 @@ class EndchanHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("div", attrs={"class": "innerOP"})
         if not op_el:

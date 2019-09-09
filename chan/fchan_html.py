@@ -1,5 +1,5 @@
 import datetime
-import json
+import _strptime
 import re
 from urllib.parse import urljoin
 
@@ -31,7 +31,7 @@ class FChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("div", id=lambda tid: tid and re.match("thread[0-9]+", tid))
 
