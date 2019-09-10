@@ -19,7 +19,7 @@ class RussianJsonChanHelper(ChanHelper):
     @staticmethod
     def parse_threads_list(r):
         try:
-            j = json.loads(r.text)
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
         except JSONDecodeError:
             logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
@@ -28,7 +28,12 @@ class RussianJsonChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        j = json.loads(r.text)
+        try:
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
+        except JSONDecodeError:
+            logger.warning("JSONDecodeError for %s:" % (r.url,))
+            logger.warning(r.text)
+            return []
         for thread in j["threads"]:
             for post in thread["posts"]:
                 yield post

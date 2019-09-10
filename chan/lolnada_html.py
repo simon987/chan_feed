@@ -39,7 +39,7 @@ class LolNadaHtmlChanHelper(ChanHelper):
         return item["time"]
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 
@@ -59,7 +59,7 @@ class LolNadaHtmlChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("div", class_="hilo")
         for post_el in op_el.find_all("div", class_="post reply"):

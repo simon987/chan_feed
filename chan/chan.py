@@ -163,7 +163,7 @@ CHANS = {
         (
             "jp", "drive"
         ),
-        rps=1 / 60
+        rps=1 / 120
     ),
     "synch": SynchJsonChanHelper(
         12,

@@ -1,5 +1,4 @@
 import datetime
-import _strptime
 import re
 from urllib.parse import urljoin
 
@@ -11,7 +10,7 @@ from chan.desuchan_html import DesuChanHtmlChanHelper
 class FChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
     def parse_threads_list(self, r):
-        soup = BeautifulSoup(r.text, "html.parser")
+        soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         threads = []
 

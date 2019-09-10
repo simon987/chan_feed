@@ -39,7 +39,7 @@ class JsonChanHelper(ChanHelper):
     @staticmethod
     def parse_threads_list(r):
         try:
-            j = json.loads(r.text)
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
             if len(j) == 0 or "threads" not in j[0]:
                 logger.warning("No threads in response for %s: %s" % (r.url, r.text,))
                 return [], None
@@ -56,5 +56,10 @@ class JsonChanHelper(ChanHelper):
 
     @staticmethod
     def parse_thread(r):
-        j = json.loads(r.text)
+        try:
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
+        except JSONDecodeError:
+            logger.warning("JSONDecodeError for %s:" % (r.url,))
+            logger.warning(r.text)
+            return []
         return j["posts"]

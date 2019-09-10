@@ -42,7 +42,7 @@ class MayuriChanHelper(ChanHelper):
 
     def parse_threads_list(self, r):
         try:
-            j = json.loads(r.text)
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
         except JSONDecodeError:
             logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
@@ -54,7 +54,7 @@ class MayuriChanHelper(ChanHelper):
     @staticmethod
     def parse_thread(r):
         try:
-            j = json.loads(r.text)
+            j = json.loads(r.content.decode('utf-8', 'ignore'))
         except JSONDecodeError:
             logger.warning("JSONDecodeError for %s:" % (r.url,))
             logger.warning(r.text)
