@@ -1,4 +1,5 @@
 from chan.alokal_json import AlokalJsonChanHelper
+from chan.chan410_html import Chan410HtmlChanHelper
 from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
@@ -28,7 +29,7 @@ CHANS = {
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
         ),
-        rps=2
+        rps=3 / 2
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -296,5 +297,16 @@ CHANS = {
             "test", "tlp", "tmp", "tv", "vg", "vipe", "wh", "xikkadvach", "ynet"
         ),
         rps=1 / 5
+    ),
+    "410chan": Chan410HtmlChanHelper(
+        23,
+        "http://410chan.org/",
+        "http://410chan.org/",
+        "/res/",
+        "/src/",
+        (
+            "d", "b", "cu", "dev", "r", "a", "ts", "ci"
+        ),
+        rps=1 / 60
     )
 }
