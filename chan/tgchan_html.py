@@ -15,8 +15,10 @@ class TgChanHtmlChanHelper(DesuChanHtmlChanHelper):
         threads = []
 
         for threadEl in soup.find_all("div", id=lambda tid: tid and tid[6:7].isdigit()):
+            omit = threadEl.find("span", class_="omittedposts")
             threads.append({
                 "id": int(re.search("thread([0-9]+)[a-zA-Z]*", threadEl.get("id")).group(1)),
+                "omit": int(omit.text.split(" ")[0]) if omit else 0
             })
 
         for form in soup.find_all("form"):

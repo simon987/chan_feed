@@ -63,7 +63,8 @@ class Web:
                     "measurement": "web",
                     "time": str(datetime.utcnow()),
                     "fields": {
-                        "status_code": r.status_code
+                        "status_code": r.status_code,
+                        "size": len(r.content),
                     },
                     "tags": {
                         "ok": r.status_code == 200
@@ -77,7 +78,8 @@ class Web:
                     "measurement": "web",
                     "time": str(datetime.utcnow()),
                     "fields": {
-                        "status_code": 0
+                        "status_code": 0,
+                        "size": 0,
                     },
                     "tags": {
                         "ok": False

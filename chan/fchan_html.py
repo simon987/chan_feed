@@ -15,8 +15,10 @@ class FChanHtmlChanHelper(DesuChanHtmlChanHelper):
         threads = []
 
         for threadEl in soup.find_all("div", id=lambda tid: tid and re.match("thread[0-9]+", tid)):
+            omit = threadEl.find("span", class_="omittedposts")
             threads.append({
                 "id": int(threadEl.get("id")[6:]),
+                "omit": int(omit.text.split(" ")[0]) if omit and omit.text else 0
             })
 
         next_url = None
