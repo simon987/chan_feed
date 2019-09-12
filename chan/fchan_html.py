@@ -21,13 +21,9 @@ class FChanHtmlChanHelper(DesuChanHtmlChanHelper):
                 "omit": int(omit.text.split(" ")[0]) if omit and omit.text else 0
             })
 
-        next_url = None
         for a in soup.find_all("a"):
             if a.text == "Next":
-                next_url = a
-                break
-        if next_url:
-            return threads, urljoin(r.url, next_url.get("href"))
+                return threads, urljoin(r.url, a.get("href"))
         return threads, None
 
     @staticmethod

@@ -1,5 +1,6 @@
 from chan.alokal_json import AlokalJsonChanHelper
 from chan.chan410_html import Chan410HtmlChanHelper
+from chan.chan7_html import Chan7HtmlChanHelper
 from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
@@ -307,6 +308,23 @@ CHANS = {
         (
             "d", "b", "cu", "dev", "r", "a", "ts", "ci"
         ),
-        rps=1 / 60
+        rps=1 / 120
+    ),
+    "7chan": Chan7HtmlChanHelper(
+        24,
+        "https://7chan.org/",
+        "https://7chan.org/",
+        "/res/",
+        "/src/",
+        (
+            "7ch", "ch7", "irc", "777", "VIP", "civ", "_vip6",
+            "b", "banner", "fl", "gfx", "fail", "class", "co",
+            "eh", "fit", "halp", "jew", "lit", "phi", "pr",
+            "rnb", "sci", "tg", "w", "zom", "a", "grim", "hi",
+            "me", "rx", "vg", "wp", "x", "cake", "cd", "d", "di",
+            "elit", "fag", "fur", "gif", "h", "men", "pco", "s",
+            "sm", "ss", "unf", "v",
+        ),
+        rps=1 / 30
     )
 }
