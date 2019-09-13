@@ -1,6 +1,7 @@
 from chan.alokal_json import AlokalJsonChanHelper
 from chan.chan410_html import Chan410HtmlChanHelper
 from chan.chan7_html import Chan7HtmlChanHelper
+from chan.chanon_html import ChanonHtmlChanHelper
 from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
@@ -324,6 +325,18 @@ CHANS = {
             "me", "rx", "vg", "wp", "x", "cake", "cd", "d", "di",
             "elit", "fag", "fur", "gif", "h", "men", "pco", "s",
             "sm", "ss", "unf", "v",
+        ),
+        rps=1 / 30
+    ),
+    "chanon": ChanonHtmlChanHelper(
+        25,
+        "https://chanon.ro/",
+        "https://chanon.ro/",
+        "/res/",
+        "/srs/",
+        (
+            "a", "int", "j", "m", "pc", "pol", "prog", "tv",
+            "b", "milo", "pr0n", "s", "c", "sug",
         ),
         rps=1 / 30
     )

@@ -58,8 +58,7 @@ class DesuChanHtmlChanHelper(ChanHelper):
         op_el = soup.find("div", id=lambda tid: tid and tid[1:].isdigit())
 
         for post_el in op_el.find_all("table", recursive=False):
-            label = post_el.find("label")
-            *_, time = label.children
+            *_, time = post_el.find("label").children
             yield {
                 "id": int(post_el.find("td", attrs={"class", "reply"}).get("id")[5:]),
                 "type": "post",
