@@ -338,6 +338,17 @@ CHANS = {
             "a", "int", "j", "m", "pc", "pol", "prog", "tv",
             "b", "milo", "pr0n", "s", "c", "sug",
         ),
-        rps=1 / 30
+        rps=1 / 60
+    ),
+    "chanorg": JsonChanHelper(
+        26,
+        "https://chan.org.il/",
+        "https://chan.org.il/",
+        "/res/",
+        "/src/",
+        (
+            "b", "goys"
+        ),
+        rps=1 / 60
     )
 }
