@@ -15,6 +15,7 @@ from post_process import post_process
 from util import logger, Web
 
 MONITORING = True
+BYPASS_RPS = False
 
 
 class ChanScanner:
@@ -201,6 +202,9 @@ if __name__ == "__main__":
     rabbitmq_host = sys.argv[1]
     chan = sys.argv[2]
     chan_helper = CHANS[chan]
+
+    if BYPASS_RPS:
+        chan_helper.rps = 10
 
     if MONITORING:
         monitoring.init()

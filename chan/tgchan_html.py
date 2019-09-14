@@ -33,20 +33,26 @@ class TgChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
         op_el = soup.find("form", id="delform")
 
+        posts = []
         for post_el in op_el.find_all("table", recursive=False):
             *_, time = post_el.find("label").children
-            yield {
+            posts.append({
                 "id": int(post_el.find("td", attrs={"class", "reply"}).get("id")[5:]),
                 "type": "post",
                 "html": str(post_el),
                 "time": int(datetime.datetime.strptime(time, "\n\n%Y/%m/%d(%a)%H:%M\n").timestamp())
-            }
+            })
             post_el.decompose()
 
         *_, time = op_el.find("label").children
+        tid = int(op_el.find("a", attrs={"name": lambda x: x and x.isdigit()}).get("name"))
         yield {
-            "id": int(op_el.find("a", attrs={"name": lambda x: x and x.isdigit()}).get("name")),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(time, "\n\n%Y/%m/%d(%a)%H:%M\n").timestamp())
         }
+
+        for post in posts:
+            post["parent"] = tid
+            yield post

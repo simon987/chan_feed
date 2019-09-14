@@ -73,7 +73,7 @@ def image_meta(url, url_idx, web):
 
 
 def post_process(item, board, helper, web):
-    item["_v"] = 1.5
+    item["_v"] = 1.6
     item["_id"] = helper.item_unique_id(item, board)
 
     item["_board"] = board

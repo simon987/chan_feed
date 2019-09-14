@@ -6,6 +6,7 @@ from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
 from chan.fchan_html import FChanHtmlChanHelper
+from chan.iichan_html import IichanHtmlChanHelper
 from chan.json import JsonChanHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
@@ -350,5 +351,20 @@ CHANS = {
             "b", "goys"
         ),
         rps=1 / 60
+    ),
+    "iichan": IichanHtmlChanHelper(
+        27,
+        "https://iichan.hk/",
+        "https://iichan.hk/",
+        "/res/",
+        "/src/",
+        (
+            "d", "b", "bro", "ci", "cu", "dev", "gf", "hr", "l",
+            "m", "med", "mi", "mu", "o", "ph", "r", "s", "sci",
+            "tran", "tu", "tv", "x", "es", "vq", "au", "tr", "a",
+            "aa", "abe", "c", "fi", "jp", "rm", "tan", "to", "ts",
+            "vn", "vo", "misc"
+        ),
+        rps=1 / 10
     )
 }

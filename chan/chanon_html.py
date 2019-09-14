@@ -44,19 +44,21 @@ class ChanonHtmlChanHelper(DesuChanHtmlChanHelper):
 
         thread_el = soup.find("div", id=lambda x: x and re.match("thread[0-9]+[a-zA-Z]*", x))
 
+        tid = int(re.search("thread([0-9]+)[a-zA-Z]*", thread_el.get("id")).group(1))
         for post_el in thread_el.find_all("table", recursive=False):
             *_, time = post_el.find("label").children
             yield {
                 "id": int(post_el.find("td", attrs={"class", "reply"}).get("id")[5:]),
                 "type": "post",
                 "html": str(post_el),
-                "time": _ts(time, r)
+                "time": _ts(time, r),
+                "parent": tid,
             }
             post_el.decompose()
 
         *_, time = thread_el.find("label").children
         yield {
-            "id": int(re.search("thread([0-9]+)[a-zA-Z]*", thread_el.get("id")).group(1)),
+            "id": tid,
             "type": "thread",
             "html": str(thread_el),
             "time": _ts(time, r)

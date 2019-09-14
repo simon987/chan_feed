@@ -56,16 +56,18 @@ class DoushioHtmlChanHelper(ChanHelper):
         soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("section")
+        tid = int(op_el.get("id"))
         for post_el in op_el.find_all("article"):
             yield {
                 "id": int(post_el.get("id")),
                 "type": "post",
                 "html": str(post_el),
-                "time": int(parser.parse(post_el.find("header").find("time").get("datetime")).timestamp())
+                "time": int(parser.parse(post_el.find("header").find("time").get("datetime")).timestamp()),
+                "parent": tid
             }
             post_el.decompose()
         yield {
-            "id": int(op_el.get("id")),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(parser.parse(op_el.find("header").find("time").get("datetime")).timestamp())

@@ -62,17 +62,19 @@ class ZerochanHtmlChanHelper(DoushioHtmlChanHelper):
 
         op_el = soup.find("section", attrs={"data-id": lambda x: x})
 
+        tid = int(op_el.get("data-id")[1:])
         for post_el in op_el.find_all("article", attrs={"data-id": lambda x: x}):
             yield {
                 "id": int(post_el.get("data-id")),
                 "type": "post",
                 "html": str(post_el),
                 "time": int(datetime.datetime.strptime(_ru_datefmt(post_el.find("time").text),
-                                                       "%d %b %Y %H:%M").timestamp())
+                                                       "%d %b %Y %H:%M").timestamp()),
+                "parent": tid,
             }
             post_el.decompose()
         yield {
-            "id": int(op_el.get("data-id")[1:]),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(_ru_datefmt(op_el.find("time").text),

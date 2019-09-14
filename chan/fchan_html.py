@@ -34,22 +34,29 @@ class FChanHtmlChanHelper(DesuChanHtmlChanHelper):
 
         is_op = True
 
+        posts = []
+        tid = None
         for post_el in op_el.find_all("table", recursive=False):
             label = post_el.find("label")
             *_, time = label.children
             if is_op:
+                tid = int(op_el.get("id")[6:])
                 yield {
-                    "id": int(op_el.get("id")[6:]),
+                    "id": tid,
                     "type": "thread",
                     "html": str(post_el),
                     "time": int(datetime.datetime.strptime(time.strip(), "%y/%m/%d(%a)%H:%M").timestamp())
                 }
                 is_op = False
             else:
-                yield {
+                posts.append({
                     "id": int(post_el.find("td", class_=lambda x: x and "reply" in x).get("id")[5:]),
                     "type": "post",
                     "html": str(post_el),
                     "time": int(datetime.datetime.strptime(time.strip(), "%y/%m/%d(%a)%H:%M").timestamp())
-                }
+                })
+
+        for post in posts:
+            post["parent"] = tid
+            yield post
 

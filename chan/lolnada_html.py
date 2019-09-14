@@ -62,16 +62,18 @@ class LolNadaHtmlChanHelper(ChanHelper):
         soup = BeautifulSoup(r.content.decode('utf-8', 'ignore'), "html.parser")
 
         op_el = soup.find("div", class_="hilo")
+        tid = int(op_el.get("id")[5:])
         for post_el in op_el.find_all("div", class_="post reply"):
             yield {
                 "id": int(post_el.get("id")[6:]),
                 "type": "post",
                 "html": str(post_el),
-                "time": int(parser.parse(post_el.find("time").get("datetime")).timestamp())
+                "time": int(parser.parse(post_el.find("time").get("datetime")).timestamp()),
+                "parent": tid
             }
             post_el.decompose()
         yield {
-            "id": int(op_el.get("id")[5:]),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(parser.parse(op_el.find("time").get("datetime")).timestamp())

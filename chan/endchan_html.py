@@ -58,8 +58,9 @@ class EndchanHtmlChanHelper(ChanHelper):
         op_el = soup.find("div", attrs={"class": "innerOP"})
         if not op_el:
             return []
+        tid = int(soup.find("div", class_="opCell").get("id"))
         yield {
-            "id": int(soup.find("div", class_="opCell").get("id")),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(op_el.find("span", class_="labelCreated").text,
@@ -72,5 +73,6 @@ class EndchanHtmlChanHelper(ChanHelper):
                 "type": "post",
                 "html": str(post_el),
                 "time": int(datetime.datetime.strptime(post_el.find("span", class_="labelCreated").text,
-                                                       "%m/%d/%Y (%a) %H:%M:%S").timestamp())
+                                                       "%m/%d/%Y (%a) %H:%M:%S").timestamp()),
+                "parent": tid
             }

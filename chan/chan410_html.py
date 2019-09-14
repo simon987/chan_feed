@@ -32,20 +32,27 @@ class Chan410HtmlChanHelper(DesuChanHtmlChanHelper):
 
         op_el = soup.find("form", id="delform")
 
+        posts = []
         for post_el in op_el.find_all("div", class_="reply"):
-            yield {
+            posts.append({
                 "id": int(post_el.get("id")[5:]),
                 "type": "post",
                 "html": str(post_el),
                 "time": int(datetime.datetime.strptime(_ru_datefmt(op_el.find("span", class_="time").text),
                                                        "%d.%m.%Y %H:%M:%S").timestamp())
-            }
+            })
             post_el.decompose()
 
+        tid = int(op_el.find("a", attrs={"name": lambda x: x and x.isdigit()}).get("name"))
         yield {
-            "id": int(op_el.find("a", attrs={"name": lambda x: x and x.isdigit()}).get("name")),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(_ru_datefmt(op_el.find("span", class_="time").text),
                                                    "%d.%m.%Y %H:%M:%S").timestamp())
         }
+
+        for post in posts:
+            post["parent"] = tid
+            yield post
+

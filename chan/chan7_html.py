@@ -38,8 +38,9 @@ class Chan7HtmlChanHelper(DesuChanHtmlChanHelper):
         thread_el = soup.find("div", id=lambda x: x and re.match("thread_[0-9]+_[a-zA-Z]*", x))
         op_el = thread_el.find("div", class_="post")
         time = "".join(s for s in op_el.find("div", class_="post_header").contents if isinstance(s, str))
+        tid = int(op_el.get("id"))
         yield {
-            "id": int(op_el.get("id")),
+            "id": tid,
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(_trim_time(time), "\n%y/%m/%d(%a)%H:%M\n").timestamp())
@@ -51,5 +52,6 @@ class Chan7HtmlChanHelper(DesuChanHtmlChanHelper):
                 "id": int(post_el.get("id")[6:]),
                 "type": "post",
                 "html": str(post_el),
-                "time": int(datetime.datetime.strptime(_trim_time(time), "\n%y/%m/%d(%a)%H:%M\n").timestamp())
+                "time": int(datetime.datetime.strptime(_trim_time(time), "\n%y/%m/%d(%a)%H:%M\n").timestamp()),
+                "parent": tid
             }
