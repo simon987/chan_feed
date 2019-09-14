@@ -10,6 +10,7 @@ from chan.iichan_html import IichanHtmlChanHelper
 from chan.json import JsonChanHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
+from chan.nowere_html import NowereHtmlChanHelper
 from chan.russian_json import RussianJsonChanHelper
 from chan.synch_json import SynchJsonChanHelper
 from chan.tgchan_html import TgChanHtmlChanHelper
@@ -366,5 +367,16 @@ CHANS = {
             "vn", "vo", "misc"
         ),
         rps=1 / 10
+    ),
+    "nowere": NowereHtmlChanHelper(
+        28,
+        "https://nowere.net/",
+        "https://nowere.net/",
+        "/res/",
+        "/src/",
+        (
+            "b", "d", "tu", "a", "ph", "wa", "cg", "t", "p"
+        ),
+        rps=1 / 60
     )
 }
