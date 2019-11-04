@@ -8,6 +8,7 @@ from chan.endchan_html import EndchanHtmlChanHelper
 from chan.fchan_html import FChanHtmlChanHelper
 from chan.iichan_html import IichanHtmlChanHelper
 from chan.json import JsonChanHelper
+from chan.json_kun import JsonKunChanHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.nowere_html import NowereHtmlChanHelper
@@ -378,5 +379,70 @@ CHANS = {
             "b", "d", "tu", "a", "ph", "wa", "cg", "t", "p"
         ),
         rps=1 / 60
+    ),
+    "8kun": JsonKunChanHelper(
+        28,
+        "https://8kun.net/",
+        "https://media.8kun.net/",
+        "/res/",
+        "file_store/",
+        (
+            "1",
+            "a",
+            "aneki",
+            "ara",
+            "asatru",
+            "asmr",
+            "aus",
+            "b",
+            "baka",
+            "brit",
+            "builders",
+            "cafechan",
+            "canada",
+            "choroy",
+            "co",
+            "cuckquean",
+            "cute",
+            "cyoa",
+            "dempart",
+            "e9y",
+            "egy", "hgg",
+            "f1",
+            "fa",
+            "feet",
+            "film",
+            "furry",
+            "hentai",
+            "hisparefugio",
+            "hypno",
+            "islam",
+            "ita",
+            "jp",
+            "komika",
+            "lewd",
+            "lit",
+            "magick",
+            "mde",
+            "monster",
+            "mu",
+            "newbrit",
+            "newsplus",
+            "ntr",
+            "philosophy",
+            "qresearch",
+            "rzabczan",
+            "s",
+            "sl",
+            "tg",
+            "turul",
+            "tv",
+            "v",
+            "vichan",
+            "vr",
+            "wx",
+            "x",
+        ),
+        rps=2/3
     )
 }
