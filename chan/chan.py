@@ -6,6 +6,7 @@ from chan.desuchan_html import DesuChanHtmlChanHelper
 from chan.doushio_html import DoushioHtmlChanHelper
 from chan.endchan_html import EndchanHtmlChanHelper
 from chan.fchan_html import FChanHtmlChanHelper
+from chan.hispachan_html import HispachanHtmlHelper
 from chan.iichan_html import IichanHtmlChanHelper
 from chan.json import JsonChanHelper
 from chan.json_kun import JsonKunChanHelper
@@ -381,7 +382,7 @@ CHANS = {
         rps=1 / 60
     ),
     "8kun": JsonKunChanHelper(
-        28,
+        29,
         "https://8kun.net/",
         "https://media.8kun.net/",
         "/res/",
@@ -443,6 +444,21 @@ CHANS = {
             "wx",
             "x",
         ),
-        rps=2/3
-    )
+        rps=1
+    ),
+    "hispachan": HispachanHtmlHelper(
+        30,
+        "https://www.hispachan.org/",
+        "https://www.hispachan.org/",
+        "/res/",
+        "/src/",
+        (
+            "a", "ac", "c", "di", "f", "g", "hu", "k", "m", "mu",
+            "p", "pol", "q", "r", "t", "tv", "v", "ar", "bo", "cc",
+            "cl", "co", "ec", "es", "mx", "pe", "py", "uy", "ve", "d",
+            "h", "o", "s", "sar", "scl", "sco", "ses", "smx", "spe", "sve",
+        ),
+        rps=1/20
+    ),
+
 }
