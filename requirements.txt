@@ -6,3 +6,5 @@ stem
 influxdb
 pika
 bs4
+urllib3
+git+git://github.com/simon987/hexlib.git

@@ -1,11 +1,14 @@
 import logging
 import sys
-import time
 import traceback
 from datetime import datetime
 from logging import FileHandler, StreamHandler
 
 import requests
+from hexlib.misc import rate_limit
+from urllib3 import disable_warnings
+
+disable_warnings()
 
 last_time_called = dict()
 
@@ -21,35 +24,26 @@ logger.addHandler(file_handler)
 logger.addHandler(StreamHandler(sys.stdout))
 
 
-def rate_limit(per_second):
-    min_interval = 1.0 / float(per_second)
-
-    def decorate(func):
-        last_time_called[func] = 0
-
-        def wrapper(*args, **kwargs):
-            elapsed = time.perf_counter() - last_time_called[func]
-            wait_time = min_interval - elapsed
-            if wait_time > 0:
-                time.sleep(wait_time)
-
-            last_time_called[func] = time.perf_counter()
-            return func(*args, **kwargs)
-
-        return wrapper
-
-    return decorate
-
-
 class Web:
-    def __init__(self, monitoring, rps=1/2):
+    def __init__(self, monitoring, rps=1 / 2, proxy=None):
         self.session = requests.Session()
+        if proxy:
+            self.session.proxies = {"http": proxy, "https": proxy}
+            self.session.verify = False
         self._rps = rps
         self.monitoring = monitoring
 
         @rate_limit(self._rps)
         def _get(url, **kwargs):
-            return self.session.get(url, **kwargs)
+            retries = 3
+
+            while retries > 0:
+                retries -= 1
+                try:
+                    return self.session.get(url, **kwargs)
+                except Exception as e:
+                    logger.warning("Error with request %s: %s" % (url, str(e)))
+            raise Exception("Gave up request after maximum number of retries")
 
         self._get = _get
 

@@ -19,8 +19,8 @@ BYPASS_RPS = False
 
 
 class ChanScanner:
-    def __init__(self, helper):
-        self.web = Web(monitoring if MONITORING else None, rps=helper.rps)
+    def __init__(self, helper, proxy):
+        self.web = Web(monitoring if MONITORING else None, rps=helper.rps, proxy=proxy)
         self.helper = helper
         self.state = ChanState()
 
@@ -139,9 +139,9 @@ class ChanState:
             conn.commit()
 
 
-def publish_worker(queue: Queue, helper):
+def publish_worker(queue: Queue, helper, p):
     channel = connect()
-    web = Web(monitoring if MONITORING else None, rps=helper.rps)
+    web = Web(monitoring if MONITORING else None, rps=helper.rps, proxy=p)
 
     while True:
         try:
@@ -203,6 +203,12 @@ if __name__ == "__main__":
     chan = sys.argv[2]
     chan_helper = CHANS[chan]
 
+    proxy = None
+    if len(sys.argv) > 3:
+        proxy = sys.argv[3]
+        logger.info("Using proxy %s" % proxy)
+
+    BYPASS_RPS = True
     if BYPASS_RPS:
         chan_helper.rps = 10
 
@@ -212,10 +218,10 @@ if __name__ == "__main__":
 
     publish_q = Queue()
     for _ in range(5):
-        publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper))
+        publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper, proxy))
         publish_thread.start()
 
-    s = ChanScanner(chan_helper)
+    s = ChanScanner(chan_helper, proxy)
     while True:
         for p, b in s.all_posts():
             publish_q.put((p, b))

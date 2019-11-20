@@ -1,17 +1,15 @@
-import base64
 import hashlib
-import re
 import zlib
 from io import BytesIO
 from urllib.parse import urljoin
 
 import imagehash
 from PIL import Image
+from hexlib.imhash import b64hash
 
 from util import logger
 
-LINK_RE = re.compile(r"(https?://[\w\-_.]+\.[a-z]{2,4}([^\s<'\"]*|$))")
-HTML_HREF_RE = re.compile(r"href=\"([^\"]+)\"")
+from hexlib.regex import HTML_HREF_RE, LINK_RE
 
 IMAGE_FILETYPES = (
     # :orig for twitter cdn
@@ -31,12 +29,6 @@ IMAGE_FILETYPES = (
 
 def _is_image(url):
     return url.lower().endswith(IMAGE_FILETYPES)
-
-
-def b64hash(imhash, bcount):
-    return base64.b64encode(
-        sum(1 << i for i, b in enumerate(imhash.hash.flatten()) if b).to_bytes(bcount, "big")
-    ).decode("ascii")
 
 
 def image_meta(url, url_idx, web):
