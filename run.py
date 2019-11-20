@@ -208,7 +208,6 @@ if __name__ == "__main__":
         proxy = sys.argv[3]
         logger.info("Using proxy %s" % proxy)
 
-    BYPASS_RPS = True
     if BYPASS_RPS:
         chan_helper.rps = 10
 
