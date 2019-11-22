@@ -41,7 +41,7 @@ class Kev4PhpHelper(ChanHelper):
 
         for threadEl in soup.find_all("p", class_="info"):
             threads.append({
-                "id": int(threadEl.find("a").get("id")[len("expandButtun"):]),
+                "id": int(threadEl.find("a").get("id")[len("expandButton"):]),
                 "omit": int(threadEl.text.split(" ")[1])
             })
 

@@ -14,6 +14,7 @@ from chan.kev4_php import Kev4PhpHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.nowere_html import NowereHtmlChanHelper
+from chan.plus4chan_html import Plus4ChanHelper
 from chan.russian_json import RussianJsonChanHelper
 from chan.synch_json import SynchJsonChanHelper
 from chan.tgchan_html import TgChanHtmlChanHelper
@@ -485,5 +486,17 @@ CHANS = {
             "television", "videogames",
         ),
         rps=1 / 20
+    ),
+    "plus4chan": Plus4ChanHelper(
+        33,
+        "https://boards.plus4chan.org/",
+        "https://boards.plus4chan.org/",
+        "",
+        "",
+        (
+            "baw", "co", "cog", "jam", "mtv",
+            "coc", "draw", "pco", "coq", "cod", "a"
+        ),
+        rps=1 / 15
     ),
 }
