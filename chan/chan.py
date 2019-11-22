@@ -10,6 +10,7 @@ from chan.hispachan_html import HispachanHtmlHelper
 from chan.iichan_html import IichanHtmlChanHelper
 from chan.json import JsonChanHelper
 from chan.json_kun import JsonKunChanHelper
+from chan.kev4_php import Kev4PhpHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.nowere_html import NowereHtmlChanHelper
@@ -471,5 +472,18 @@ CHANS = {
             "kitchen", "tunes", "culture", "silicon", "yakuza", "hell", "lewd"
         ),
         rps=1 / 30
+    ),
+    "4kev": Kev4PhpHelper(
+        32,
+        "https://www.4kev.org/",
+        "https://www.4kev.org/",
+        "threads.php",
+        "/src/",
+        (
+            "anime", "cyberpunk", "design", "feels", "meta", "music",
+            "politics", "programming", "random", "technology",
+            "television", "videogames",
+        ),
+        rps=1 / 20
     ),
 }
