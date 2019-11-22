@@ -460,5 +460,16 @@ CHANS = {
         ),
         rps=1/20
     ),
-
+    "sushigirl": JsonChanHelper(
+        31,
+        "https://sushigirl.us/",
+        "https://sushigirl.us/",
+        "/res/",
+        "/src/",
+        (
+            "archive", "wildcard", "lounge", "arcade", "kawaii",
+            "kitchen", "tunes", "culture", "silicon", "yakuza", "hell", "lewd"
+        ),
+        rps=1 / 30
+    ),
 }
