@@ -71,9 +71,9 @@ class Chan2Helper(ChanHelper):
                 "omit": signed64(strhash(omit.text)) if omit else 0
             })
 
-        # for btn in soup.find_all("input"):
-        #     if btn.get("value") == "次のページ":
-        #         return threads, urljoin(r.url, btn.parent.get("action"))
+        for btn in soup.find_all("input"):
+            if btn.get("value") == "次のページ":
+                return threads, urljoin(r.url, btn.parent.get("action"))
         return threads, None
 
     @staticmethod
