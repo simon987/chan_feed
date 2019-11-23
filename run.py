@@ -2,6 +2,7 @@ import datetime
 import json
 import sqlite3
 import sys
+import time
 import traceback
 from datetime import datetime
 from queue import Queue
@@ -118,11 +119,11 @@ class ChanState:
         with sqlite3.connect(self._db, timeout=5000) as conn:
             cur = conn.cursor()
             cur.execute(
-                "SELECT last_modified FROM threads WHERE thread=? AND chan=?",
+                "SELECT last_modified, ts FROM threads WHERE thread=? AND chan=?",
                 (helper.item_unique_id(thread, board), helper.db_id)
             )
             row = cur.fetchone()
-            if not row or helper.thread_mtime(thread) != row[0]:
+            if not row or helper.thread_mtime(thread) != row[0] or row[1] + 86400 < int(time.time()):
                 return True
             return False
 
@@ -132,7 +133,7 @@ class ChanState:
                 "INSERT INTO threads (thread, last_modified, chan) "
                 "VALUES (?,?,?) "
                 "ON CONFLICT (thread, chan) "
-                "DO UPDATE SET last_modified=?",
+                "DO UPDATE SET last_modified=?, ts=(strftime('%s','now'))",
                 (helper.item_unique_id(thread, board), helper.thread_mtime(thread), helper.db_id,
                  helper.thread_mtime(thread))
             )
@@ -183,6 +184,7 @@ def publish(item, board, helper, channel, web):
         except Exception as e:
             logger.debug(traceback.format_exc())
             logger.error(str(e))
+            time.sleep(0.5)
             channel = connect()
 
 

@@ -1,4 +1,5 @@
 from chan.alokal_json import AlokalJsonChanHelper
+from chan.chan2_jap import Chan2Helper
 from chan.chan410_html import Chan410HtmlChanHelper
 from chan.chan7_html import Chan7HtmlChanHelper
 from chan.chanon_html import ChanonHtmlChanHelper
@@ -460,7 +461,7 @@ CHANS = {
             "cl", "co", "ec", "es", "mx", "pe", "py", "uy", "ve", "d",
             "h", "o", "s", "sar", "scl", "sco", "ses", "smx", "spe", "sve",
         ),
-        rps=1/20
+        rps=1 / 20
     ),
     "sushigirl": JsonChanHelper(
         31,
@@ -498,5 +499,130 @@ CHANS = {
             "coc", "draw", "pco", "coq", "cod", "a"
         ),
         rps=1 / 15
+    ),
+    "2chan": Chan2Helper(
+        34,
+        "https://<sub>.2chan.net",
+        "https://<sub>.2chan.net",
+        "/res/",
+        "/src/",
+        (
+            "1",  # baseball
+            "12",  # soccer
+            "25<may>",  # Mahjong
+            "26<may>",  # Horses
+            "27<may>",  # Cats,
+            "d",  # Animals
+            "z",  # Plant life
+            "w",  # Insects
+            "49",  # Aquatic life
+            "62<dec>",  # Outdoor
+            "t",  # Cooking
+            "20",  # Sweets
+            "21",  # ramen
+            "e",  # vehicles
+            "j",  # moto & scooters
+            "37<nov>",  # Bicycles
+            "45",  # Cameras
+            "48",  # Consumer electronics
+            "r",  # railroad
+            "img2",  # 2-D
+            "b<dec>",  # Nijura
+            "b<may>",
+            "b<jun>",
+            "jun<jun>",
+
+            "58<dec>",  # ??? 二次元裏転載不可
+            "59<dec>",  # ??? 二次元裏転載可
+
+            "id<may>",  # 2-D ID
+            "23",  # Speedgrapher
+            "18<dec>",  # 2d-Live
+            "16",  # 2-D Neta
+            "43",  # 2-D Industry
+
+            "74<dec>",  # ??? FGO
+            "75<dec>",  # ??? アイマス
+            "78<dec>",  # ??? ウメハラ総合
+
+            "31<jun>",  # Games
+            "28<nov>",  # Net games
+
+            "56<dec>",  # ??? ソシャゲ
+            "60<dec>",  # ??? 艦これ
+            "69<dec>",  # ??? モアイ
+            "65<dec>",  # ??? 刀剣乱舞
+            "64<dec>",  # ??? 占い
+            "66<dec>",  # ??? ファッション
+            "67<dec>",  # ??? 旅行
+            "68<dec>",  # ??? 子育て
+
+            "webm<may>",
+
+            "71<dec>",  # ??? そうだね
+            "82<dec>",  # ??? 任天堂
+            "61<dec>",  # ??? ソニー
+
+            "10",  # Net characters
+            "34<nov>",  # Narikiri
+            "11",  # Original art
+            "14",  # Original art flipside
+            "32",  # Crossdressing
+            "15",  # Bara
+            "7",  # Yuri
+            "8",  # Yaoi
+            "o",  # 2-D Guro
+            "51",  # 2-D Guro flipside
+            "5",  # Erotic games
+            "3",  # Homebrew PC
+            "g",  # Tokusatsu
+            "2",  # Robot manga and anime
+
+            "63<dec>",  # 映画
+
+            "44",  # Toys
+            "v",  # Models
+            "y<nov>",  # Models flipside nov
+            "47",  # Models flipside jun
+            "46",  # Figures
+            "73<dec>",  # VTuber
+            "81<dec>",  # 合成音声
+
+            "x",  # 3DCG
+            "35<nov>",  # Politics
+            "36<nov>",  # Economics
+            "79<dec>",  # Economics
+            "38",  # Korean economics
+
+            "80<dec>",  # ??? 安倍晋三
+            "50<dec>",  # ??? 三次実況
+
+            "f",  # Military
+            "39<may>",  # Military flipside
+            "m",  # Mathematics
+            "i",  # Flash
+            "k",  # Wallpaper
+            "l",  # 2D Wallpaper
+            "40<may>",  # Touhou
+
+            "55<dec>",  # ??? 東方裏
+
+            "p",  # Oekaki
+            "q<nov>",  # Rakugaki
+            "u",  # Rakugaki flipside
+            "6",  # News desk
+            "76<dec>",  # ??? 昭和
+            "77<dec>",  # ??? 平成
+            "9<img>",  # Idle chat
+            "52",  # Great tohoku Earthquake of 2011
+            "53",  # Nuclear power
+            "70<dec>",  # ??? 新板提案
+            "54",  # IPv6
+            "layout<may>",
+
+            "oe",  # ??? お絵sql
+            "72",  # ??? お絵sqlip
+        ),
+        rps=1 / 3
     ),
 }
