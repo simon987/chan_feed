@@ -6,6 +6,10 @@ from util import logger
 
 class JsonKunChanHelper(JsonChanHelper):
 
+    @staticmethod
+    def item_type(item):
+        return "thread" if item["resto"] == 0 else "post"
+
     def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards, rps):
         super().__init__(db_id, base_url, image_url, thread_path, image_path, boards, rps)
 
