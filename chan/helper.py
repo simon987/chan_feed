@@ -10,6 +10,7 @@ class ChanHelper:
         self._image_path = image_path
         self._boards = boards
         self.rps = rps
+        self.get_method = None
 
     def boards(self):
         return [b.replace("\\_", "_") for b in self._boards if not b.startswith("_")]

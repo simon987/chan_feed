@@ -25,13 +25,14 @@ logger.addHandler(StreamHandler(sys.stdout))
 
 
 class Web:
-    def __init__(self, monitoring, rps=1 / 2, proxy=None):
+    def __init__(self, monitoring, rps=1 / 2, proxy=None, get_method=None):
         self.session = requests.Session()
         if proxy:
             self.session.proxies = {"http": proxy, "https": proxy}
             self.session.verify = False
         self._rps = rps
         self.monitoring = monitoring
+        self._get_method = get_method
 
         @rate_limit(self._rps)
         def _get(url, **kwargs):
@@ -40,6 +41,8 @@ class Web:
             while retries > 0:
                 retries -= 1
                 try:
+                    if self._get_method:
+                        return self._get_method(url, **kwargs)
                     return self.session.get(url, **kwargs)
                 except Exception as e:
                     logger.warning("Error with request %s: %s" % (url, str(e)))

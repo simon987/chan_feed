@@ -21,7 +21,7 @@ BYPASS_RPS = False
 
 class ChanScanner:
     def __init__(self, helper, proxy):
-        self.web = Web(monitoring if MONITORING else None, rps=helper.rps, proxy=proxy)
+        self.web = Web(monitoring if MONITORING else None, rps=helper.rps, get_method=helper.get_method, proxy=proxy)
         self.helper = helper
         self.state = ChanState()
 
@@ -142,7 +142,7 @@ class ChanState:
 
 def publish_worker(queue: Queue, helper, p):
     channel = connect()
-    web = Web(monitoring if MONITORING else None, rps=helper.rps, proxy=p)
+    web = Web(monitoring if MONITORING else None, rps=helper.rps, get_method=helper.get_method, proxy=p)
 
     while True:
         try:
