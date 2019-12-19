@@ -153,6 +153,8 @@ def publish_worker(queue: Queue, helper, p):
     while True:
         try:
             item, board = queue.get()
+            if item is None:
+                break
             publish(item, board, helper, channel, web)
 
         except Exception as e:
@@ -243,9 +245,15 @@ if __name__ == "__main__":
     publish_q = Queue()
     for _ in range(5):
         publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper, proxy))
+        publish_thread.setDaemon(True)
         publish_thread.start()
 
     s = ChanScanner(chan_helper, proxy)
     while True:
-        for p, b in s.all_posts():
-            publish_q.put((p, b))
+        try:
+            for p, b in s.all_posts():
+                publish_q.put((p, b))
+        except KeyboardInterrupt as e:
+            for _ in range(5):
+                publish_q.put((None, None))
+            break

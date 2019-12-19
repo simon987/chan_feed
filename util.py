@@ -70,6 +70,8 @@ class Web:
                     },
                 }])
             return r
+        except KeyboardInterrupt as e:
+            raise e
         except Exception as e:
             logger.error(str(e) + traceback.format_exc())
             if self.monitoring:
