@@ -44,6 +44,8 @@ class Web:
                     if self._get_method:
                         return self._get_method(url, **kwargs)
                     return self.session.get(url, **kwargs)
+                except KeyboardInterrupt as e:
+                    raise e
                 except Exception as e:
                     logger.warning("Error with request %s: %s" % (url, str(e)))
             raise Exception("Gave up request after maximum number of retries")
