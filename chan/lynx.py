@@ -24,7 +24,7 @@ class LynxChanHelper(ChanHelper):
 
     @staticmethod
     def item_mtime(item):
-        return datetime.fromisoformat(item["creation"]).timestamp()
+        return datetime.fromisoformat(item["creation"][:-1]).timestamp()
 
     def item_urls(self, item, board):
         return [
