@@ -9,10 +9,11 @@ from chan.endchan_html import EndchanHtmlChanHelper
 from chan.fchan_html import FChanHtmlChanHelper
 from chan.hispachan_html import HispachanHtmlHelper
 from chan.iichan_html import IichanHtmlChanHelper
-from chan.json import JsonChanHelper
+from chan.chan_json import JsonChanHelper
 from chan.json_kun import JsonKunChanHelper
 from chan.kev4_php import Kev4PhpHelper
 from chan.lolnada_html import LolNadaHtmlChanHelper
+from chan.lynx import LynxChanHelper
 from chan.mayuri import MayuriChanHelper
 from chan.nowere_html import NowereHtmlChanHelper
 from chan.plus4chan_html import Plus4ChanHelper
@@ -596,5 +597,26 @@ CHANS = {
         ),
         rps=1 / 3
     ),
-    # next is 36
+    "waifuist": LynxChanHelper(
+        36,
+        "https://waifuist.pro/",
+        "https://waifuist.pro/",
+        "/res/",
+        "",
+        (
+            "w", "starlet", "etc",
+        ),
+        rps=1 / 25
+    ),
+    "cutiegarden": LynxChanHelper(
+        37,
+        "https://cutie.garden/",
+        "https://cutie.garden/",
+        "/res/",
+        "",
+        (
+            "lg", "cozy", "meta", "test"
+        ),
+        rps=1 / 25
+    ),
 }

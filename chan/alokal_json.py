@@ -1,4 +1,4 @@
-from chan.json import JsonChanHelper
+from chan.chan_json import JsonChanHelper
 from post_process import get_links_from_body
 
 

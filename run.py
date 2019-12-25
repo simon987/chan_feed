@@ -102,14 +102,14 @@ class ChanState:
             conn.commit()
 
     def mark_visited(self, item: int, helper):
-        with sqlite3.connect(self._db) as conn:
+        with sqlite3.connect(self._db, timeout=10000) as conn:
             conn.execute(
                 "INSERT INTO posts (post, chan) VALUES (?,?)",
                 (item, helper.db_id)
             )
 
     def has_visited(self, item: int, helper):
-        with sqlite3.connect(self._db) as conn:
+        with sqlite3.connect(self._db, timeout=10000) as conn:
             cur = conn.cursor()
             cur.execute(
                 "SELECT post FROM posts WHERE post=? AND chan=?",
@@ -122,7 +122,7 @@ class ChanState:
         if mtime == -1:
             return True
 
-        with sqlite3.connect(self._db, timeout=5000) as conn:
+        with sqlite3.connect(self._db, timeout=10000) as conn:
             cur = conn.cursor()
             cur.execute(
                 "SELECT last_modified, ts FROM threads WHERE thread=? AND chan=?",
@@ -134,7 +134,7 @@ class ChanState:
             return False
 
     def mark_thread_as_visited(self, thread, helper, board):
-        with sqlite3.connect(self._db, timeout=5000) as conn:
+        with sqlite3.connect(self._db, timeout=10000) as conn:
             conn.execute(
                 "INSERT INTO threads (thread, last_modified, chan) "
                 "VALUES (?,?,?) "
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     state = ChanState()
 
     publish_q = Queue()
-    for _ in range(5):
+    for _ in range(10):
         publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper, proxy))
         publish_thread.setDaemon(True)
         publish_thread.start()

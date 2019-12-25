@@ -1,6 +1,6 @@
 from vanwanet_scrape.scraper import Scraper
 
-from chan.json import JsonChanHelper
+from chan.chan_json import JsonChanHelper
 from util import logger
 
 
