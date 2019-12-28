@@ -4,6 +4,7 @@ from json import JSONDecodeError
 from urllib.parse import urljoin
 
 import cloudscraper
+import sys
 
 from chan.helper import ChanHelper
 from util import logger
@@ -16,6 +17,10 @@ class LynxChanHelper(ChanHelper):
         super().__init__(db_id, base_url, image_url, thread_path, image_path, boards, rps)
 
         scraper = cloudscraper.create_scraper()
+        if len(sys.argv) > 3:
+            proxy = sys.argv[3]
+            scraper.proxies = {"http": proxy, "https": proxy}
+            scraper.verify = False
         self.get_method = scraper.get
 
     @staticmethod
