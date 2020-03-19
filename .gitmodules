@@ -1,0 +1,3 @@
+[submodule "docker_viz/feed_viz"]
+	path = docker_viz/feed_viz
+	url = https://github.com/simon987/feed_viz

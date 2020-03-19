@@ -1,0 +1,54 @@
+version: "2.1"
+services:
+  influxdb:
+    image: influxdb:alpine
+    volumes:
+      - ./influxdb_data:/var/lib/influxdb
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 127.0.0.1:3006:3000
+    environment:
+      - "GF_SECURITY_ADMIN_PASSWORD=changeme"
+  db:
+    image: postgres
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_USER=feed_archiver"
+      - "POSTGRES_PASSWORD=changeme"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U feed_archiver"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  rabbitmq:
+    image: rabbitmq:alpine
+  archiver:
+    image: simon987/feed_archiver
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - "FA_DB_HOST=db"
+      - "FA_DB_USER=feed_archiver"
+      - "FA_DB_PASSWORD=changeme"
+      - "FA_MQ_CONNSTR=amqp://guest:guest@rabbitmq:5672/"
+      - "FA_EXCHANGES=chan"
+  ws_adapter:
+    image: simon987/ws_feed_adapter
+    environment:
+      - "WSA_MQ_CONNSTR=amqp://guest:guest@rabbitmq:5672/"
+  feed_viz_frontend:
+    build: ./docker_viz/
+    ports:
+    - 127.0.0.1:3005:80
+  chan_4chan:
+    image: simon987/chan_feed
+    restart: always
+    environment:
+      - "CF_CHAN=4chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+

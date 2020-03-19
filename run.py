@@ -1,7 +1,7 @@
 import datetime
 import json
+import os
 import sqlite3
-import sys
 import time
 import traceback
 from collections import defaultdict
@@ -17,12 +17,12 @@ from chan.chan import CHANS
 from post_process import post_process
 from util import logger, Web
 
-MONITORING = True
 BYPASS_RPS = False
 
 DBNAME = "chan_feed"
-if MONITORING:
-    influxdb = Monitoring(DBNAME, logger=logger, batch_size=100, flush_on_exit=True)
+if os.environ.get("CF_INFLUXDB"):
+    influxdb = Monitoring(DBNAME, host=os.environ.get("CF_INFLUXDB"), logger=logger, batch_size=100, flush_on_exit=True)
+    MONITORING = True
 
 
 class ChanScanner:
@@ -163,7 +163,7 @@ def publish_worker(queue: Queue, helper, p):
             queue.task_done()
 
 
-@buffered(batch_size=300, flush_on_exit=True)
+@buffered(batch_size=150, flush_on_exit=True)
 def _publish_buffered(items):
     if not items:
         return
@@ -216,25 +216,27 @@ def publish(item, board, helper, channel, web):
 
 
 def connect():
-    rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
-    channel = rabbit.channel()
-    channel.exchange_declare(exchange="chan", exchange_type="topic")
-    return channel
+    while True:
+        try:
+            rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
+            channel = rabbit.channel()
+            channel.exchange_declare(exchange="chan", exchange_type="topic")
+            return channel
+        except Exception as e:
+            logger.error(str(e))
+            time.sleep(0.5)
+            pass
 
 
 if __name__ == "__main__":
 
-    if len(sys.argv) < 3:
-        logger.error("You must specify RabbitMQ host & chan!")
-        quit(1)
-
-    rabbitmq_host = sys.argv[1]
-    chan = sys.argv[2]
+    rabbitmq_host = os.environ.get("CF_MQ_HOST", "localhost")
+    chan = os.environ.get("CF_CHAN", None)
     chan_helper = CHANS[chan]
 
     proxy = None
-    if len(sys.argv) > 3:
-        proxy = sys.argv[3]
+    if os.environ.get("CF_PROXY"):
+        proxy = os.environ.get("CF_PROXY")
         logger.info("Using proxy %s" % proxy)
 
     if BYPASS_RPS:
