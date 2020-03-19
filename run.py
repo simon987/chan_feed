@@ -233,6 +233,10 @@ if __name__ == "__main__":
     rabbitmq_host = os.environ.get("CF_MQ_HOST", "localhost")
     chan = os.environ.get("CF_CHAN", None)
     chan_helper = CHANS[chan]
+    save_folder = os.environ.get("CF_SAVE_FOLDER", "")
+
+    if save_folder:
+        chan_helper.save_folder = save_folder
 
     proxy = None
     if os.environ.get("CF_PROXY"):

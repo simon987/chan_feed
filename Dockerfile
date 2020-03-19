@@ -1,10 +1,11 @@
 FROM python:3.8
 
-WORKDIR /app
-
-ADD requirements.txt /app/requirements.txt
+ADD requirements.txt /requirements.txt
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "run.py"]
-
 COPY . /app
+
+RUN chmod 777 -R /app
+
+WORKDIR /app
+ENTRYPOINT ["python", "run.py"]

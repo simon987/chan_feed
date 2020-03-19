@@ -11,6 +11,7 @@ class ChanHelper:
         self._boards = boards
         self.rps = rps
         self.get_method = None
+        self.save_folder = None
 
     def boards(self):
         return [b.replace("\\_", "_") for b in self._boards if not b.startswith("_")]

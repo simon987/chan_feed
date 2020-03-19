@@ -1,9 +1,13 @@
 version: "2.1"
+volumes:
+  influxdb_data:
+  pg_data:
+
 services:
   influxdb:
     image: influxdb:alpine
     volumes:
-      - ./influxdb_data:/var/lib/influxdb
+      - influxdb_data:/var/lib/influxdb
   grafana:
     image: grafana/grafana
     ports:
@@ -13,7 +17,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     environment:
       - "POSTGRES_USER=feed_archiver"
       - "POSTGRES_PASSWORD=changeme"
@@ -44,11 +48,412 @@ services:
     build: ./docker_viz/
     ports:
     - 127.0.0.1:3005:80
-  chan_4chan:
+  # Image boards
+  0chan:
     image: simon987/chan_feed
     restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=0chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  22chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=22chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  2chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=2chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+
+  2chhk:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=2chhk"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  38chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=38chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  410chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=410chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  4chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
     environment:
       - "CF_CHAN=4chan"
       - "CF_MQ_HOST=rabbitmq"
       - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
 
+  4kev:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=4kev"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  7chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=7chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  8kun:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=8kun"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  alokal:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=alokal"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  aurorachan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=aurorachan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  awsumchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=awsumchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  chanon:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=chanon"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  chanorg:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=chanorg"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  desuchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=desuchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  doushio:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=doushio"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  endchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=endchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  fchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=fchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  gnfos:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=gnfos"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  hispachan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=hispachan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  horochan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=horochan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  iichan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=iichan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  lainchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=lainchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  lolnada:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=lolnada"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  nowere:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=nowere"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  plus4chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=plus4chan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  sushigirl:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=sushigirl"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  synch:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=synch"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  tahta:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=tahta"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  tgchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=tgchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  uboachan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=uboachan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  waifuist:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=waifuist"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"
+
+  wizchan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    volumes:
+      - ${SAVE_FOLDER}:/data/
+    environment:
+      - "CF_CHAN=wizchan"
+      - "CF_MQ_HOST=rabbitmq"
+      - "CF_INFLUXDB=influxdb"
+      - "CF_SAVE_FOLDER=/data/"

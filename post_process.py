@@ -1,7 +1,8 @@
 import hashlib
+import os
 import zlib
 from io import BytesIO
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import imagehash
 from PIL import Image
@@ -31,12 +32,22 @@ def _is_image(url):
     return url.lower().endswith(IMAGE_FILETYPES)
 
 
-def image_meta(url, url_idx, web):
+def image_meta(url, url_idx, web, helper, board):
     r = web.get(url)
     if not r:
         logger.warning("Could not download image")
         return None
     buf = r.content
+
+    sha1 = hashlib.sha1(buf).hexdigest()
+
+    if helper.save_folder:
+        path = os.path.join(helper.save_folder, str(helper.db_id), board)
+        path += "/" + sha1[0]
+        path += "/" + sha1[1:3]
+        os.makedirs(path, exist_ok=True)
+        with open(os.path.join(path, sha1 + os.path.splitext(url)[1]), "wb") as out:
+            out.write(buf)
 
     try:
         f = BytesIO(buf)
@@ -47,7 +58,7 @@ def image_meta(url, url_idx, web):
             "size": len(buf),
             "width": im.width,
             "height": im.height,
-            "sha1": hashlib.sha1(buf).hexdigest(),
+            "sha1": sha1,
             "md5": hashlib.md5(buf).hexdigest(),
             "crc32": format(zlib.crc32(buf), "x"),
             "dhash": b64hash(imagehash.dhash(im, hash_size=12), 18),
@@ -73,7 +84,7 @@ def post_process(item, board, helper, web):
 
     item["_urls"] = helper.item_urls(item, board)
 
-    item["_img"] = [image_meta(url, i, web) for i, url in enumerate(item["_urls"]) if _is_image(url)]
+    item["_img"] = [image_meta(url, i, web, helper, board) for i, url in enumerate(item["_urls"]) if _is_image(url)]
 
     return item
 
