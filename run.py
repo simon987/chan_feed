@@ -1,16 +1,14 @@
 import datetime
 import json
 import os
-import sqlite3
 import time
 import traceback
-from collections import defaultdict
 from datetime import datetime
 from queue import Queue
 from threading import Thread
+import redis
 
-import pika
-from hexlib.misc import buffered
+from hexlib.db import VolatileState
 from hexlib.monitoring import Monitoring
 
 from chan.chan import CHANS
@@ -23,13 +21,23 @@ DBNAME = "chan_feed"
 if os.environ.get("CF_INFLUXDB"):
     influxdb = Monitoring(DBNAME, host=os.environ.get("CF_INFLUXDB"), logger=logger, batch_size=100, flush_on_exit=True)
     MONITORING = True
+else:
+    MONITORING = False
+
+REDIS_HOST = os.environ.get("CF_REDIS_HOST", "localhost")
+REDIS_PORT = os.environ.get("CF_REDIS_PORT", 6379)
+CHAN = os.environ.get("CF_CHAN", None)
+
+ARC_LISTS = os.environ.get("CF_ARC_LISTS", "arc,imhash").split(",")
+
+PUB_CHANNEL = os.environ.get("CF_PUB_CHANNEL", "chan_feed")
 
 
 class ChanScanner:
     def __init__(self, helper, proxy):
         self.web = Web(influxdb if MONITORING else None, rps=helper.rps, get_method=helper.get_method, proxy=proxy)
         self.helper = helper
-        self.state = ChanState()
+        self.state = state
 
     def _threads(self, board):
         r = self.web.get(self.helper.threads_url(board))
@@ -66,96 +74,50 @@ class ChanScanner:
 
 
 def once(func):
-    def wrapper(item, board, helper, channel, web):
-        if not state.has_visited(helper.item_unique_id(item, board), helper):
-            func(item, board, helper, channel, web)
-            state.mark_visited(helper.item_unique_id(item, board), helper)
+    def wrapper(item, board, helper):
+        if not state.has_visited(helper.item_unique_id(item, board)):
+            func(item, board, helper)
+            state.mark_visited(helper.item_unique_id(item, board))
 
     return wrapper
 
 
 class ChanState:
-    def __init__(self):
-        self._db = "state.db"
+    def __init__(self, prefix):
+        self._state = VolatileState(prefix, 86400 * 7, host=REDIS_HOST, port=REDIS_PORT)
+        print("redis host=" + REDIS_HOST)
 
-        with sqlite3.connect(self._db) as conn:
-            conn.execute(
-                "CREATE TABLE IF NOT EXISTS posts "
-                "("
-                "   post INT,"
-                "   ts INT DEFAULT (strftime('%s','now')),"
-                "   chan INT,"
-                "   PRIMARY KEY(post, chan)"
-                ")"
-            )
-            conn.execute(
-                "CREATE TABLE IF NOT EXISTS threads "
-                "("
-                "   thread INT,"
-                "   last_modified INT,"
-                "   ts INT DEFAULT (strftime('%s','now')),"
-                "   chan INT,"
-                "   PRIMARY KEY(thread, chan)"
-                ")"
-            )
-            conn.execute("PRAGMA journal_mode=wal")
-            conn.commit()
+    def mark_visited(self, item: int):
+        self._state["posts"][item] = 1
 
-    def mark_visited(self, item: int, helper):
-        with sqlite3.connect(self._db, timeout=10000) as conn:
-            conn.execute(
-                "INSERT INTO posts (post, chan) VALUES (?,?)",
-                (item, helper.db_id)
-            )
-
-    def has_visited(self, item: int, helper):
-        with sqlite3.connect(self._db, timeout=10000) as conn:
-            cur = conn.cursor()
-            cur.execute(
-                "SELECT post FROM posts WHERE post=? AND chan=?",
-                (item, helper.db_id)
-            )
-            return cur.fetchone() is not None
+    def has_visited(self, item: int):
+        return self._state["posts"][item] is not None
 
     def has_new_posts(self, thread, helper, board):
         mtime = helper.thread_mtime(thread)
         if mtime == -1:
             return True
 
-        with sqlite3.connect(self._db, timeout=10000) as conn:
-            cur = conn.cursor()
-            cur.execute(
-                "SELECT last_modified, ts FROM threads WHERE thread=? AND chan=?",
-                (helper.item_unique_id(thread, board), helper.db_id)
-            )
-            row = cur.fetchone()
-            if not row or helper.thread_mtime(thread) != row[0] or row[1] + 86400 < int(time.time()):
-                return True
-            return False
+        t = self._state["threads"][helper.item_unique_id(thread, board)]
+
+        if not t or helper.thread_mtime(thread) != t["last_modified"] or t["ts"] + 86400 < int(time.time()):
+            return True
+        return False
 
     def mark_thread_as_visited(self, thread, helper, board):
-        with sqlite3.connect(self._db, timeout=10000) as conn:
-            conn.execute(
-                "INSERT INTO threads (thread, last_modified, chan) "
-                "VALUES (?,?,?) "
-                "ON CONFLICT (thread, chan) "
-                "DO UPDATE SET last_modified=?, ts=(strftime('%s','now'))",
-                (helper.item_unique_id(thread, board), helper.thread_mtime(thread), helper.db_id,
-                 helper.thread_mtime(thread))
-            )
-            conn.commit()
+        self._state["threads"][helper.item_unique_id(thread, board)] = {
+            "ts": time.time(),
+            "last_modified": helper.thread_mtime(thread)
+        }
 
 
 def publish_worker(queue: Queue, helper, p):
-    channel = connect()
-    web = Web(influxdb if MONITORING else None, rps=helper.rps, get_method=helper.get_method, proxy=p)
-
     while True:
         try:
             item, board = queue.get()
             if item is None:
                 break
-            publish(item, board, helper, channel, web)
+            publish(item, board, helper,)
 
         except Exception as e:
             logger.error(str(e) + ": " + traceback.format_exc())
@@ -163,48 +125,22 @@ def publish_worker(queue: Queue, helper, p):
             queue.task_done()
 
 
-@buffered(batch_size=150, flush_on_exit=True)
-def _publish_buffered(items):
-    if not items:
-        return
-
-    buckets = defaultdict(list)
-    for item in items:
-        buckets[item[1]].append(item)
-
-    for bucket in buckets.values():
-        channel, routing_key, _ = bucket[0]
-        body = [item[2] for item in bucket]
-
-        while True:
-            try:
-                channel.basic_publish(
-                    exchange='chan',
-                    routing_key=routing_key,
-                    body=json.dumps(body, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
-                )
-                logger.debug("RabbitMQ: published %d items" % len(body))
-                break
-            except Exception as e:
-                # logger.debug(traceback.format_exc())
-                logger.error(str(e))
-                time.sleep(0.5)
-                channel = connect()
-
-
 @once
-def publish(item, board, helper, channel, web):
-    post_process(item, board, helper, web)
+def publish(item, board, helper):
+    post_process(item, board, helper)
 
     item_type = helper.item_type(item)
-    routing_key = "%s.%s.%s" % (chan, item_type, board)
+    routing_key = "%s.%s.%s" % (CHAN, item_type, board)
 
-    _publish_buffered([(channel, routing_key, item)])
+    message = json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
+    rdb.publish("chan." + routing_key, message)
+    for arc in ARC_LISTS:
+        rdb.lpush(arc + ".chan." + routing_key, message)
 
     if MONITORING:
         distance = datetime.utcnow() - datetime.utcfromtimestamp(helper.item_mtime(item))
         influxdb.log([{
-            "measurement": chan,
+            "measurement": CHAN,
             "time": str(datetime.utcnow()),
             "tags": {
                 "board": board
@@ -215,24 +151,8 @@ def publish(item, board, helper, channel, web):
         }])
 
 
-def connect():
-    while True:
-        try:
-            rabbit = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host))
-            channel = rabbit.channel()
-            channel.exchange_declare(exchange="chan", exchange_type="topic")
-            return channel
-        except Exception as e:
-            logger.error(str(e))
-            time.sleep(0.5)
-            pass
-
-
 if __name__ == "__main__":
-
-    rabbitmq_host = os.environ.get("CF_MQ_HOST", "localhost")
-    chan = os.environ.get("CF_CHAN", None)
-    chan_helper = CHANS[chan]
+    chan_helper = CHANS[CHAN]
     save_folder = os.environ.get("CF_SAVE_FOLDER", "")
 
     if save_folder:
@@ -246,10 +166,11 @@ if __name__ == "__main__":
     if BYPASS_RPS:
         chan_helper.rps = 10
 
-    state = ChanState()
+    state = ChanState(CHAN)
+    rdb = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
 
     publish_q = Queue()
-    for _ in range(10):
+    for _ in range(3):
         publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper, proxy))
         publish_thread.setDaemon(True)
         publish_thread.start()
@@ -260,6 +181,7 @@ if __name__ == "__main__":
             for p, b in s.all_posts():
                 publish_q.put((p, b))
         except KeyboardInterrupt as e:
-            for _ in range(5):
+            print("cleanup..")
+            for _ in range(3):
                 publish_q.put((None, None))
             break

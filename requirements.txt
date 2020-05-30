@@ -1,12 +1,10 @@
-imagehash
-Pillow
 requests
 requests[socks]
 stem
 influxdb
-pika
 bs4
 urllib3
 git+git://github.com/simon987/hexlib.git
 git+git://github.com/simon987/vanwanet_scrape.git
 cloudscraper
+redis

@@ -1,7 +1,7 @@
 ### chan_feed
 
 Daemon that fetches posts from compatible *chan
-image boards and publishes serialised JSON to RabbitMQ
+image boards and publishes serialised JSON to redis
  for real-time ingest.
  
 Compatible image boards: 4chan, lainchan, uboachan,
