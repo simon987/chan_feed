@@ -451,7 +451,7 @@ CHANS = {
          "resist", "revolu", "skemt", "sketheory", "spaceforce", "surro", "thehand", "transit", "vitaecryptocurrency",
          "qsocial", "resist", "revolu", "skemt", "sketheory", "spaceforce", "surro", "thehand", "transit",
          "vitaecryptocurrency"),
-        rps=2
+        rps=1 / 3
     ),
     "hispachan": HispachanHtmlHelper(
         30,
