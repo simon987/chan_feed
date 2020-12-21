@@ -45,7 +45,7 @@ class Plus4ChanHelper(ChanHelper):
 
             threads.append({
                 "id": int(threadEl.get("id")[1:]),
-                "omit": int(omit.text.split(" ")[1]) if omit else 0
+                "omit": int(omit.text.strip().split(" ")[1]) if omit else 0
             })
 
         for link in soup.find_all("a", href=lambda x: x):
