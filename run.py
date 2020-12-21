@@ -8,7 +8,7 @@ from queue import Queue
 from threading import Thread
 import redis
 
-from hexlib.db import VolatileBooleanState
+from hexlib.db import VolatileBooleanState, VolatileState
 from hexlib.monitoring import Monitoring
 
 from chan.chan import CHANS
@@ -27,6 +27,7 @@ else:
 REDIS_HOST = os.environ.get("CF_REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("CF_REDIS_PORT", 6379)
 CHAN = os.environ.get("CF_CHAN", None)
+CF_PUBLISH = os.environ.get("CF_PUBLISH", False)
 
 ARC_LISTS = os.environ.get("CF_ARC_LISTS", "arc").split(",")
 
@@ -82,30 +83,29 @@ def once(func):
 
 class ChanState:
     def __init__(self, prefix):
-        self._state = VolatileBooleanState(prefix, host=REDIS_HOST, port=REDIS_PORT)
+        self._posts = VolatileBooleanState(prefix, host=REDIS_HOST, port=REDIS_PORT)
+        self._threads = VolatileState(prefix, host=REDIS_HOST, port=REDIS_PORT)
         print("redis host=" + REDIS_HOST)
 
     def mark_visited(self, item: int):
-        self._state["posts"][item] = True
+        self._posts["posts"][item] = True
 
     def has_visited(self, item: int):
-        return self._state["posts"][item] is not None
+        return self._posts["posts"][item]
 
     def has_new_posts(self, thread, helper, board):
         mtime = helper.thread_mtime(thread)
         if mtime == -1:
             return True
 
-        t = self._state["threads"][helper.item_unique_id(thread, board)]
+        t = self._threads["threads"][helper.item_unique_id(thread, board)]
 
-        if not t or helper.thread_mtime(thread) != t["last_modified"] or t["ts"] + 86400 < int(time.time()):
-            return True
-        return False
+        return not t or helper.thread_mtime(thread) != t["m"] or t["t"] + 86400 < int(time.time())
 
     def mark_thread_as_visited(self, thread, helper, board):
-        self._state["threads"][helper.item_unique_id(thread, board)] = {
-            "ts": time.time(),
-            "last_modified": helper.thread_mtime(thread)
+        self._threads["threads"][helper.item_unique_id(thread, board)] = {
+            "t": int(time.time()),
+            "m": helper.thread_mtime(thread)
         }
 
 
@@ -131,7 +131,8 @@ def publish(item, board, helper):
     routing_key = "%s.%s.%s" % (CHAN, item_type, board)
 
     message = json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
-    rdb.publish("chan." + routing_key, message)
+    if CF_PUBLISH:
+        rdb.publish("chan." + routing_key, message)
     for arc in ARC_LISTS:
         rdb.lpush(arc + ".chan." + routing_key, message)
 
