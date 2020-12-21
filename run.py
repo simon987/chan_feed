@@ -8,7 +8,7 @@ from queue import Queue
 from threading import Thread
 import redis
 
-from hexlib.db import VolatileState
+from hexlib.db import VolatileBooleanState
 from hexlib.monitoring import Monitoring
 
 from chan.chan import CHANS
@@ -28,9 +28,7 @@ REDIS_HOST = os.environ.get("CF_REDIS_HOST", "localhost")
 REDIS_PORT = os.environ.get("CF_REDIS_PORT", 6379)
 CHAN = os.environ.get("CF_CHAN", None)
 
-ARC_LISTS = os.environ.get("CF_ARC_LISTS", "arc,imhash").split(",")
-
-PUB_CHANNEL = os.environ.get("CF_PUB_CHANNEL", "chan_feed")
+ARC_LISTS = os.environ.get("CF_ARC_LISTS", "arc").split(",")
 
 
 class ChanScanner:
@@ -84,11 +82,11 @@ def once(func):
 
 class ChanState:
     def __init__(self, prefix):
-        self._state = VolatileState(prefix, 86400 * 7, host=REDIS_HOST, port=REDIS_PORT)
+        self._state = VolatileBooleanState(prefix, host=REDIS_HOST, port=REDIS_PORT)
         print("redis host=" + REDIS_HOST)
 
     def mark_visited(self, item: int):
-        self._state["posts"][item] = 1
+        self._state["posts"][item] = True
 
     def has_visited(self, item: int):
         return self._state["posts"][item] is not None
