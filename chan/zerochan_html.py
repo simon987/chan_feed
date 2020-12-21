@@ -78,5 +78,5 @@ class ZerochanHtmlChanHelper(DoushioHtmlChanHelper):
             "type": "thread",
             "html": str(op_el),
             "time": int(datetime.datetime.strptime(_ru_datefmt(op_el.find("time").text),
-                                                   "%d %b %Y %H:%M").timestamp())
+                                                   "%d %b %Y %H:%M:%S").timestamp())
         }
