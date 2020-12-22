@@ -374,3 +374,11 @@ services:
       - "CF_CHAN=wizchan"
       - "CF_REDIS_HOST=redis"
       - "CF_INFLUXDB=influxdb"
+  9chan:
+    image: simon987/chan_feed
+    restart: always
+    user: ${CURRENT_UID}
+    environment:
+      - "CF_CHAN=9chan"
+      - "CF_REDIS_HOST=redis"
+      - "CF_INFLUXDB=influxdb"
