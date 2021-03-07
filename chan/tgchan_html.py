@@ -36,6 +36,10 @@ class TgChanHtmlChanHelper(DesuChanHtmlChanHelper):
         posts = []
         for post_el in op_el.find_all("table", recursive=False):
             *_, time = post_el.find("label").children
+
+            if post_el.get("class") and "userdelete" in post_el.get("class"):
+                continue
+
             posts.append({
                 "id": int(post_el.find("td", attrs={"class", "reply"}).get("id")[5:]),
                 "type": "post",

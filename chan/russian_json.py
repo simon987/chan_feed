@@ -3,8 +3,7 @@ from json import JSONDecodeError
 
 from chan.helper import ChanHelper
 from post_process import get_links_from_body
-from util import logger
-
+from hexlib.log import logger
 
 class RussianJsonChanHelper(ChanHelper):
 

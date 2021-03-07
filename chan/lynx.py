@@ -7,14 +7,14 @@ import cloudscraper
 import sys
 
 from chan.helper import ChanHelper
-from util import logger
+from hexlib.log import logger
 
 
 class LynxChanHelper(ChanHelper):
     """See https://gitgud.io/LynxChan/LynxChan/blob/master/doc/Json.txt"""
 
-    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards, rps):
-        super().__init__(db_id, base_url, image_url, thread_path, image_path, boards, rps)
+    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards):
+        super().__init__(db_id, base_url, image_url, thread_path, image_path, boards)
 
         scraper = cloudscraper.create_scraper()
         if len(sys.argv) > 3:

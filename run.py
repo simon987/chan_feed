@@ -1,40 +1,24 @@
-import datetime
 import json
 import os
 import time
 import traceback
-from datetime import datetime
 from queue import Queue
 from threading import Thread
-import redis
 
+from hexlib.concurrency import queue_iter
 from hexlib.db import VolatileBooleanState, VolatileState
-from hexlib.monitoring import Monitoring
+from hexlib.env import get_web, get_redis
+from hexlib.log import logger
 
 from chan.chan import CHANS
 from post_process import post_process
-from util import logger, Web
 
-BYPASS_RPS = False
-
-DBNAME = "chan_feed"
-if os.environ.get("CF_INFLUXDB"):
-    influxdb = Monitoring(DBNAME, host=os.environ.get("CF_INFLUXDB"), logger=logger, batch_size=100, flush_on_exit=True)
-    MONITORING = True
-else:
-    MONITORING = False
-
-REDIS_HOST = os.environ.get("CF_REDIS_HOST", "localhost")
-REDIS_PORT = os.environ.get("CF_REDIS_PORT", 6379)
 CHAN = os.environ.get("CF_CHAN", None)
-CF_PUBLISH = os.environ.get("CF_PUBLISH", False)
-
-ARC_LISTS = os.environ.get("CF_ARC_LISTS", "arc").split(",")
 
 
 class ChanScanner:
-    def __init__(self, helper, proxy):
-        self.web = Web(influxdb if MONITORING else None, rps=helper.rps, get_method=helper.get_method, proxy=proxy)
+    def __init__(self, helper):
+        self.web = get_web()
         self.helper = helper
         self.state = state
 
@@ -83,9 +67,8 @@ def once(func):
 
 class ChanState:
     def __init__(self, prefix):
-        self._posts = VolatileBooleanState(prefix, host=REDIS_HOST, port=REDIS_PORT)
-        self._threads = VolatileState(prefix, host=REDIS_HOST, port=REDIS_PORT)
-        print("redis host=" + REDIS_HOST)
+        self._posts = VolatileBooleanState(prefix)
+        self._threads = VolatileState(prefix)
 
     def mark_visited(self, item: int):
         self._posts["posts"][item] = True
@@ -109,18 +92,12 @@ class ChanState:
         }
 
 
-def publish_worker(queue: Queue, helper, p):
-    while True:
+def publish_worker(queue: Queue, helper):
+    for item, board in queue_iter(queue):
         try:
-            item, board = queue.get()
-            if item is None:
-                break
-            publish(item, board, helper,)
-
+            publish(item, board, helper)
         except Exception as e:
             logger.error(str(e) + ": " + traceback.format_exc())
-        finally:
-            queue.task_done()
 
 
 @once
@@ -131,23 +108,7 @@ def publish(item, board, helper):
     routing_key = "%s.%s.%s" % (CHAN, item_type, board)
 
     message = json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
-    if CF_PUBLISH:
-        rdb.publish("chan." + routing_key, message)
-    for arc in ARC_LISTS:
-        rdb.lpush(arc + ".chan." + routing_key, message)
-
-    if MONITORING:
-        distance = datetime.utcnow() - datetime.utcfromtimestamp(helper.item_mtime(item))
-        influxdb.log([{
-            "measurement": CHAN,
-            "time": str(datetime.utcnow()),
-            "tags": {
-                "board": board
-            },
-            "fields": {
-                "distance": distance.total_seconds()
-            }
-        }])
+    rdb.lpush("arc.chan2." + routing_key, message)
 
 
 if __name__ == "__main__":
@@ -157,30 +118,20 @@ if __name__ == "__main__":
     if save_folder:
         chan_helper.save_folder = save_folder
 
-    proxy = None
-    if os.environ.get("CF_PROXY"):
-        proxy = os.environ.get("CF_PROXY")
-        logger.info("Using proxy %s" % proxy)
-
-    if BYPASS_RPS:
-        chan_helper.rps = 10
-
     state = ChanState(CHAN)
-    rdb = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
+    rdb = get_redis()
 
     publish_q = Queue()
-    for _ in range(3):
-        publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper, proxy))
-        publish_thread.setDaemon(True)
-        publish_thread.start()
+    publish_thread = Thread(target=publish_worker, args=(publish_q, chan_helper))
+    publish_thread.setDaemon(True)
+    publish_thread.start()
 
-    s = ChanScanner(chan_helper, proxy)
+    s = ChanScanner(chan_helper)
     while True:
         try:
             for p, b in s.all_posts():
                 publish_q.put((p, b))
         except KeyboardInterrupt as e:
             print("cleanup..")
-            for _ in range(3):
-                publish_q.put((None, None))
+            publish_q.put(None)
             break

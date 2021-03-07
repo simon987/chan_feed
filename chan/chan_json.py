@@ -1,9 +1,10 @@
 import json
 from json import JSONDecodeError
 
+from hexlib.log import logger
+
 from chan.helper import ChanHelper
 from post_process import get_links_from_body
-from util import logger
 
 
 class JsonChanHelper(ChanHelper):

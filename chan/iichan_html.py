@@ -3,9 +3,9 @@ import re
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
+from hexlib.log import logger
 
 from chan.desuchan_html import DesuChanHtmlChanHelper
-from util import logger
 
 
 def _ts(text):

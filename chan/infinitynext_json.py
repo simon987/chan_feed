@@ -3,9 +3,10 @@ from urllib.parse import urljoin
 
 import json
 
+from hexlib.log import logger
+
 from chan.helper import ChanHelper
 from post_process import get_links_from_body
-from util import logger
 
 
 class JsonInfinityNextChanHelper(ChanHelper):

@@ -40,7 +40,6 @@ CHANS = {
             "news", "out", "po", "pol", "qst", "sci", "soc", "sp",
             "tg", "toy", "trv", "tv", "vp", "wsg", "wsr", "x"
         ),
-        rps=3 / 2
     ),
     "lainchan": JsonChanHelper(
         2,
@@ -53,7 +52,6 @@ CHANS = {
             "hum", "drg", "zzz", "layer", "q", "r", "_cult", "_psy",
             "_mega",
         ),
-        rps=1 / 60
     ),
     "uboachan": JsonChanHelper(
         3,
@@ -65,7 +63,6 @@ CHANS = {
             "yn", "yndd", "fg", "yume", "o", "lit", "media", "og",
             "ig", "2", "ot", "hikki", "cc", "x", "sugg"
         ),
-        rps=1 / 120
     ),
     "22chan": JsonChanHelper(
         4,
@@ -77,7 +74,6 @@ CHANS = {
             "a", "b", "f", "yu", "i", "k", "mu", "pol", "sewers",
             "sg", "t", "vg"
         ),
-        rps=1 / 120
     ),
     "wizchan": JsonChanHelper(
         5,
@@ -88,7 +84,6 @@ CHANS = {
         (
             "wiz", "dep", "hob", "lounge", "jp", "meta", "games", "music",
         ),
-        rps=1 / 60
     ),
     # TODO
     # "1chan": ChanHelper(
@@ -100,7 +95,6 @@ CHANS = {
     #     (
     #         "rails"
     #     ),
-    #     rps=1 / 600
     # ),
     "2chhk": RussianJsonChanHelper(
         7,
@@ -120,7 +114,6 @@ CHANS = {
             "a", "fd", "ja", "ma", "vn", "fg", "fur", "gg", "ga",
             "vape", "h", "ho", "hc", "e", "fet", "sex", "fag"
         ),
-        rps=1 / 5
     ),
     "endchan": EndchanHtmlChanHelper(
         8,
@@ -141,7 +134,6 @@ CHANS = {
             "ausneets", "qanonresearch", "polru", "yuri", "christianity",
             "kc", "rapport", "news", "brit", "webm", "4chon"
         ),
-        rps=1 / 10
     ),
     "38chan": JsonChanHelper(
         9,
@@ -152,7 +144,6 @@ CHANS = {
         (
             "a", "b", "g", "38"
         ),
-        rps=1 / 600
     ),
     "alokal": AlokalJsonChanHelper(
         10,
@@ -164,7 +155,6 @@ CHANS = {
             "b", "pol", "sk", "int", "slav", "s", "gv", "mda", "sp",
             "fit", "had",
         ),
-        rps=1 / 60
     ),
     "gnfos": JsonChanHelper(
         11,
@@ -175,7 +165,6 @@ CHANS = {
         (
             "jp", "drive"
         ),
-        rps=1 / 120
     ),
     "synch": SynchJsonChanHelper(
         12,
@@ -187,7 +176,6 @@ CHANS = {
             "b", "d", "_r", "a", "_g", "mlp", "mu", "_tv", "vg",
             "_wh", "old", "test"
         ),
-        rps=1 / 120
     ),
     "tahta": JsonChanHelper(
         13,
@@ -198,7 +186,6 @@ CHANS = {
         (
             "b", "g", "s", "v"
         ),
-        rps=1 / 300
     ),
     "awsumchan": JsonChanHelper(
         14,
@@ -209,7 +196,6 @@ CHANS = {
         (
             "an", "aw", "cr", "fi", "ra", "au", "ga", "he", "sp"
         ),
-        rps=1 / 600
     ),
     "horochan": MayuriChanHelper(
         15,
@@ -218,7 +204,6 @@ CHANS = {
         (
             "b",
         ),
-        rps=1 / 20
     ),
     "doushio": DoushioHtmlChanHelper(
         16,
@@ -229,7 +214,6 @@ CHANS = {
         (
             "moe",
         ),
-        rps=1 / 20
     ),
     "desuchan": DesuChanHtmlChanHelper(
         17,
@@ -245,7 +229,6 @@ CHANS = {
             "arrrrr", "brocastan", "gar", "gif", "media", "ot", "r", "w",
             "sandbox", "sugg"
         ),
-        rps=1 / 30
     ),
     "aurorachan": DesuChanHtmlChanHelper(
         18,
@@ -257,7 +240,6 @@ CHANS = {
             "_bm", "de", "ic", "rp", "rpi", "v", "w", "tg",
             "alt", "b", "g", "pkmn", "yuri", "fl", "mu", "sugg"
         ),
-        rps=1 / 20
     ),
     "tgchan": TgChanHtmlChanHelper(
         19,
@@ -268,7 +250,6 @@ CHANS = {
         (
             "draw", "meep", "quest", "questdis", "tg", "icons",
         ),
-        rps=1 / 600,
     ),
     "lolnada": LolNadaHtmlChanHelper(
         20,
@@ -280,7 +261,6 @@ CHANS = {
             "b", "a", "aw", "cgl", "dw", "int", "qt", "sad", "t",
             "toy", "v", "x", "34", "e", "f", "h"
         ),
-        rps=1 / 60,
     ),
     "fchan": FChanHtmlChanHelper(
         21,
@@ -291,7 +271,6 @@ CHANS = {
         (
             "f", "m", "h", "s", "toon", "a", "ah", "c", "artist", "crit", "b"
         ),
-        rps=1 / 60,
     ),
     "0chan": ZerochanHtmlChanHelper(
         22,
@@ -307,7 +286,6 @@ CHANS = {
             "poligon", "postach", "psih", "r", "rm", "s", "shrek", "shy", "t",
             "test", "tlp", "tmp", "tv", "vg", "vipe", "wh", "xikkadvach", "ynet"
         ),
-        rps=1 / 5
     ),
     "410chan": Chan410HtmlChanHelper(
         23,
@@ -318,7 +296,6 @@ CHANS = {
         (
             "d", "b", "cu", "dev", "r", "a", "ts", "ci"
         ),
-        rps=1 / 120
     ),
     "7chan": Chan7HtmlChanHelper(
         24,
@@ -335,7 +312,6 @@ CHANS = {
             "elit", "fag", "fur", "gif", "h", "men", "pco", "s",
             "sm", "ss", "unf", "v",
         ),
-        rps=1 / 30
     ),
     "chanon": ChanonHtmlChanHelper(
         25,
@@ -347,7 +323,6 @@ CHANS = {
             "a", "int", "j", "m", "pc", "pol", "prog", "tv",
             "b", "milo", "pr0n", "s", "c", "sug",
         ),
-        rps=1 / 60
     ),
     "chanorg": JsonChanHelper(
         26,
@@ -358,7 +333,6 @@ CHANS = {
         (
             "b", "goys"
         ),
-        rps=1 / 60
     ),
     "iichan": IichanHtmlChanHelper(
         27,
@@ -373,7 +347,6 @@ CHANS = {
             "aa", "abe", "c", "fi", "jp", "rm", "tan", "to", "ts",
             "vn", "vo", "misc"
         ),
-        rps=1 / 10
     ),
     "nowere": NowereHtmlChanHelper(
         28,
@@ -384,7 +357,6 @@ CHANS = {
         (
             "b", "d", "tu", "a", "ph", "wa", "cg", "t", "p"
         ),
-        rps=1 / 60
     ),
     "8kun2": JsonKunChanHelper(
         35,
@@ -392,67 +364,84 @@ CHANS = {
         "https://media.8kun.top/",
         "/res/",
         "file_store/",
-        ("1", "55chan", "_64chen", "8bantb", "8tube", "a", "_abdl2", "agdg", "amv", "aneki", "animu", "animus", "ara",
-         "arda", "arms", "asatru", "asmr", "aus", "ausneets", "__b", "__baka", "_baneposting", "__baseballbat",
-         "bcards", "bleached", "blog", "__bonehurtingjuice", "bq", "__brit", "bubblegum", "builders", "bunkers", "butt",
-         "cafechan", "caffe", "canada", "cath", "chori", "choroy", "christian", "christianity", "christianmeme",
-         "cicachan", "civicrs", "ck", "cloveros", "co", "cow", "__cuckquean", "cute", "cyber", "cyoa", "__czech",
-         "dadtalk", "danpu", "dao101", "degen", "delete", "dempart", "desu", "diaperfags", "diaperfetish", "dir",
-         "__dolphin", "dpfag", "_dpr", "druid", "_e9y", "eatme", "ebola", "eerie", "egy", "egypt", "etika", "eu",
-         "euskotxa", "__exit", "f1", "fa", "fairy", "fallen", "fast", "faygo", "feet", "femaledomination", "feri",
-         "__fightcomms", "film", "flemish", "floss", "fortnite", "freedomzine", "fukemo", "fumo", "fur", "furry", "g",
-         "gamergatehq", "genesis", "_gesu", "ggis", "girltalk", "greenbreeze", "gts", "haxxor", "hentai", "hentaiclub",
-         "__herm", "hermetics", "hgb", "hgg", "__hindu", "hisparefugio", "hissss", "hnt", "hover", "hybrids", "hydrus",
-         "hypno", "_hypnochan", "icup", "imperium", "in", "ipfs", "ircsecrets", "islam", "ita", "jaooo", "jewess",
-         "jmaatv", "joker", "jp", "k", "_kekforceusa", "kemono", "kocsog", "kohlchan", "__(komica)", "_komika", "kpop",
-         "lain", "_lego", "leo", "lewd", "lit", "lol", "loomis", "loroy", "luddite", "magick", "maka", "mde",
-         "merrychristmas", "miku", "milf", "mom", "monster", "msb", "mtb", "mtt", "mu", "n0thingness", "nanachi",
-         "natiofr", "nep", "newbrit", "newsplus", "nobody", "nofap", "nofur", "nogatco", "nothingness", "ntr", "_nuke8",
-         "oanda", "__ocb", "__ocult", "_omorashi", "opmk", "os", "otter", "p", "panconleche", "pdfs", "__peaceofmind",
-         "pen", "philosophy", "_pkmns", "pnd", "pokeporn", "polymath", "pone", "projectdcomms", "__pyatibrat", "_qm",
-         "qpatriotresearch", "__qresearch", "qrnews", "__rand21", "rec", "rmart", "rusrandom", "rzabczan", "s", "s8s",
-         "sag", "sapphic", "shousa", "sikhi", "sip", "sl", "_snowboarding", "socpl", "strek", "subs", "__sve", "t",
-         "tan", "tdt", "tech9", "techan", "techbunker", "tek", "templeos", "tenda", "teraha", "__texit", "tf2", "__tg",
-         "_thb", "thedickshow", "throat", "_tibby", "tikilounge", "tkr", "tr55", "__trashcollector", "truthlegion",
-         "tulpamancers", "turul", "tutturu", "tv", "u", "uaco", "_ucla", "underground", "__usersunion", "v", "vichan",
-         "vietkong", "vietnam", "vore", "vr", "_warposting", "wdsc", "webm", "wg", "__wga", "wikieat", "wis", "wmafsex",
-         "workrelated", "wqt", "wx", "x", "__xivl", "__xtian", "zoomerright", "zundel", "0", "55sync", "abdl",
-         "alleycat", "_arisu", "arisubunker", "_arp", "bane", "_bimbohypnosis", "_bluemoon", "bmn", "brains", "cats",
-         "_chance", "clang", "comfy", "critters", "_cursed", "_cvine", "cze", "d", "dcaco", "demonp", "_dnmd", "doomer",
-         "doot", "elitabla", "_empanada", "erp", "_falseflags", "fashionplus", "fata", "femdom", "fit", "_flg",
-         "_fr8chan", "futyitorna", "garrett", "_giantesshentai", "hentaiporn", "hmfr", "hooliedayz", "hsp", "hujszon",
-         "iep", "just", "k46", "kind", "_kiwc", "kukichan", "_lacajita", "_legos", "lgd", "liveanarchy",
-         "luciddreaming", "m", "_mapp", "mental", "_mets", "_milhis", "monarchy", "_myon", "newhomosuck", "newsci",
-         "_nine", "oes", "onepiece", "_other369", "otomad", "_penguware", "psyid", "qresearch2gen", "rule34",
-         "_satorare", "sonyeon", "split", "sunflower", "_tae", "test", "_tft", "tftg", "toy", "trap", "_vein",
-         "_virtualreality", "vivian", "voros", "wbr", "_weird", "wooo", "yuuka", "fringe", "random", "cuteboys", "tech",
-         "internatiomall", "interracial", "liberty", "htg", "mai", "komica", "cutebois", "argentina", "r", "tf",
-         "draftnote", "abcu", "k117", "britfeel", "liberty", "htg", "mai", "komica", "cutebois", "argentina", "r", "tf",
-         "draftnote", "abcu", "k117", "britfeel", "y", "an", "francofil", "portal", "royalhawk", "vdm", "bullmask",
-         "imouto", "tripfriend", "arepa", "rwby", "sw", "y", "an", "francofil", "portal", "royalhawk", "vdm",
-         "bullmask", "imouto", "tripfriend", "arepa", "rwby", "sw", "magali", "hikki", "biz", "eris", "india", "mg",
-         "magali", "hikki", "biz", "eris", "india", "mg", "out", "infinity", "tifa", "muslim", "out", "infinity",
-         "tifa", "muslim", "slackware", "archivo", "flatearth", "yaoi", "boombox", "wdp", "thedonald",
-         "libertedexpression", "khyber", "jsr", "slackware", "archivo", "flatearth", "yaoi", "boombox", "wdp",
-         "thedonald", "libertedexpression", "khyber", "jsr", "fso", "wumpawhip", "buddhismhotline", "indochinaexpats",
-         "ett", "redbar", "skyline350gt", "asc", "bazafx", "bestkorea", "covid19", "sokra", "bowsu", "qpatriotsunited",
-         "verzet", "wlctint", "cultstate", "melody", "vedic", "yhvh", "1cok", "astropolis", "fso", "wumpawhip",
-         "buddhismhotline", "indochinaexpats", "ett", "redbar", "skyline350gt", "asc", "bazafx", "bestkorea", "covid19",
-         "sokra", "bowsu", "qpatriotsunited", "verzet", "wlctint", "cultstate", "melody", "vedic", "yhvh", "1cok",
-         "astropolis", "earthlibfront", "pardochan", "stanislawowski", "thetrump", "yukkuri", "1825kun", "cryptobtc",
-         "isol", "knights", "language", "rr34", "sperg", "awaken", "belgium", "blizzard", "brain", "buddha", "dbs",
-         "deestevensvoice4you", "f4net", "fuckuchina", "gbtv", "hairygirls", "hallaca", "homeowner", "indo", "jersey",
-         "jigglypuff", "lbt", "madh4ckrs", "medcorp", "miamichan", "mrsfrisby", "mulatto", "mupro", "nhoodlink",
-         "p5porn", "patriotrevolution", "peko", "projectobject", "prop", "pups", "qanonspain", "qcastellano",
-         "earthlibfront", "pardochan", "stanislawowski", "thetrump", "yukkuri", "1825kun", "cryptobtc", "isol",
-         "knights", "language", "rr34", "sperg", "awaken", "belgium", "blizzard", "brain", "buddha", "dbs",
-         "deestevensvoice4you", "f4net", "fuckuchina", "gbtv", "hairygirls", "hallaca", "homeowner", "indo", "jersey",
-         "jigglypuff", "lbt", "madh4ckrs", "medcorp", "miamichan", "mrsfrisby", "mulatto", "mupro", "nhoodlink",
-         "p5porn", "patriotrevolution", "peko", "projectobject", "prop", "pups", "qanonspain", "qcastellano", "qsocial",
-         "resist", "revolu", "skemt", "sketheory", "spaceforce", "surro", "thehand", "transit", "vitaecryptocurrency",
-         "qsocial", "resist", "revolu", "skemt", "sketheory", "spaceforce", "surro", "thehand", "transit",
-         "vitaecryptocurrency"),
-        rps=1 / 3
+        ("1", "55chan", "_64chen", "8bantb", "8tube", "a", "_abdl2", "agdg", "_amv", "aneki", "animu", "animus", "ara",
+         "arda", "_arms", "asatru", "_asmr", "aus", "ausneets", "_b", "_baka", "_baneposting", "_baseballbat",
+         "_bcards", "bleached", "blog", "_bonehurtingjuice", "_bq", "_brit", "bubblegum", "builders", "bunkers", "butt",
+         "cafechan", "caffe", "canada", "_cath", "chori", "choroy", "christian", "christianity", "_christianmeme",
+         "cicachan", "civicrs", "ck", "cloveros", "co", "cow", "_cuckquean", "cute", "cyber", "cyoa", "_czech",
+         "_dadtalk", "danpu", "dao101", "degen", "delete", "dempart", "desu", "diaperfags", "diaperfetish", "dir",
+         "_dolphin", "_dpfag", "_dpr", "druid", "_e9y", "_eatme", "ebola", "eerie", "egy", "egypt", "_etika", "_eu",
+         "_euskotxa", "_exit", "f1", "fa", "_fairy", "fallen", "fast", "faygo", "feet", "femaledomination", "feri",
+         "_fightcomms", "film", "flemish", "_floss", "fortnite", "freedomzine", "fukemo", "fumo", "fur", "furry", "g",
+         "gamergatehq", "genesis", "_gesu", "_ggis", "girltalk", "greenbreeze", "gts", "_haxxor", "hentai",
+         "hentaiclub", "_herm", "_hermetics", "_hgb", "hgg", "_hindu", "hisparefugio", "_hissss", "hnt", "hover",
+         "hybrids", "_hydrus", "hypno", "_hypnochan", "icup", "imperium", "in", "ipfs", "ircsecrets", "islam", "ita",
+         "_jaooo", "jewess", "_jmaatv", "_joker", "jp", "k", "_kekforceusa", "kemono", "kocsog", "kohlchan",
+         "_(komica)", "_komika", "kpop", "lain", "_lego", "leo", "lewd", "lit", "_lol", "loomis", "_loroy", "luddite",
+         "magick", "maka", "mde", "_merrychristmas", "_miku", "milf", "_mom", "monster", "_msb", "mtb", "mtt", "mu",
+         "_n0thingness", "_nanachi", "natiofr", "nep", "newbrit", "newsplus", "_nobody", "nofap", "_nofur", "_nogatco",
+         "nothingness", "ntr", "_nuke8", "_oanda", "_ocb", "_ocult", "_omorashi", "_opmk", "os", "otter", "p",
+         "_panconleche", "pdfs", "_peaceofmind", "pen", "philosophy", "_pkmns", "pnd", "pokeporn", "polymath", "pone",
+         "projectdcomms", "_pyatibrat", "_qm", "qpatriotresearch", "qresearch", "qrnews", "_rand21", "rec", "rmart",
+         "_rusrandom", "rzabczan", "s", "s8s", "_sag", "sapphic", "shousa", "_sikhi", "sip", "sl", "_snowboarding",
+         "socpl", "strek", "_subs", "_sve", "t", "tan", "tdt", "_tech9", "_techan", "techbunker", "_tek", "templeos",
+         "tenda", "teraha", "_texit", "tf2", "_tg", "_thb", "_thedickshow", "throat", "_tibby", "tikilounge", "tkr",
+         "_tr55", "_trashcollector", "truthlegion", "tulpamancers", "turul", "tutturu", "tv", "u", "_uaco", "_ucla",
+         "underground", "_usersunion", "v", "vichan", "_vietkong", "vietnam", "vore", "vr", "_warposting", "wdsc",
+         "webm", "wg", "_wga", "wikieat", "wis", "wmafsex", "_workrelated", "_wqt", "wx", "x", "_xivl", "_xtian",
+         "_zoomerright", "zundel", "0", "55sync", "abdl", "alleycat", "_arisu", "_arisubunker", "_arp", "_bane",
+         "_bimbohypnosis", "_bluemoon", "bmn", "brains", "cats", "_chance", "clang", "comfy", "_critters", "_cursed",
+         "_cvine", "_cze", "d", "dcaco", "_demonp", "_dnmd", "doomer", "doot", "elitabla", "_empanada", "erp",
+         "_falseflags", "fashionplus", "_fata", "femdom", "fit", "_flg", "_fr8chan", "futyitorna", "garrett",
+         "_giantesshentai", "hentaiporn", "_hmfr", "hooliedayz", "hsp", "_hujszon", "_iep", "just", "k46", "_kind",
+         "_kiwc", "kukichan", "_lacajita", "_legos", "_lgd", "liveanarchy", "_luciddreaming", "m", "_mapp", "mental",
+         "_mets", "_milhis", "monarchy", "_myon", "newhomosuck", "newsci", "_nine", "_oes", "_onepiece", "_other369",
+         "_otomad", "_penguware", "psyid", "qresearch2gen", "rule34", "_satorare", "sonyeon", "split", "_sunflower",
+         "_tae", "test", "_tft", "tftg", "toy", "trap", "_vein", "_virtualreality", "vivian", "voros", "wbr", "_weird",
+         "wooo", "yuuka", "fringe", "random", "cuteboys", "tech", "_internatiomall", "interracial", "liberty", "htg",
+         "mai", "komica", "cutebois", "argentina", "r", "tf", "draftnote", "abcu", "_k117", "britfeel", "liberty",
+         "htg", "mai", "komica", "cutebois", "argentina", "r", "tf", "draftnote", "abcu", "_k117", "britfeel", "y",
+         "an", "francofil", "portal", "_royalhawk", "_vdm", "_bullmask", "imouto", "tripfriend", "arepa", "rwby", "sw",
+         "y", "an", "francofil", "portal", "_royalhawk", "_vdm", "_bullmask", "imouto", "tripfriend", "arepa", "rwby",
+         "sw", "magali", "hikki", "biz", "eris", "india", "mg", "magali", "hikki", "biz", "eris", "india", "mg", "out",
+         "_infinity", "tifa", "_muslim", "out", "_infinity", "tifa", "_muslim", "slackware", "archivo", "_flatearth",
+         "_yaoi", "_boombox", "_wdp", "thedonald", "libertedexpression", "_khyber", "jsr", "slackware", "archivo",
+         "_flatearth", "_yaoi", "_boombox", "_wdp", "thedonald", "libertedexpression", "_khyber", "jsr", "fso",
+         "wumpawhip", "_buddhismhotline", "indochinaexpats", "_ett", "_redbar", "_skyline350gt", "_asc", "bazafx",
+         "bestkorea", "covid19", "_sokra", "_bowsu", "_qpatriotsunited", "_verzet", "_wlctint", "_cultstate", "_melody",
+         "_vedic", "yhvh", "1cok", "_astropolis", "fso", "wumpawhip", "_buddhismhotline", "indochinaexpats", "_ett",
+         "_redbar", "_skyline350gt", "_asc", "bazafx", "bestkorea", "covid19", "_sokra", "_bowsu", "_qpatriotsunited",
+         "_verzet", "_wlctint", "_cultstate", "_melody", "_vedic", "yhvh", "1cok", "_astropolis", "_earthlibfront",
+         "_pardochan", "_stanislawowski", "_thetrump", "yukkuri", "1825kun", "cryptobtc", "_isol", "_knights",
+         "language", "_rr34", "_sperg", "_awaken", "_belgium", "_blizzard", "_brain", "buddha", "_dbs",
+         "_deestevensvoice4you", "_f4net", "_fuckuchina", "_gbtv", "hairygirls", "_hallaca", "_homeowner", "indo",
+         "_jersey", "_jigglypuff", "_lbt", "_madh4ckrs", "_medcorp", "_miamichan", "mrsfrisby", "_mulatto", "_mupro",
+         "_nhoodlink", "_p5porn", "_patriotrevolution", "_peko", "_projectobject", "_prop", "pups", "_qanonspain",
+         "_qcastellano", "_earthlibfront", "_pardochan", "_stanislawowski", "_thetrump", "yukkuri", "1825kun",
+         "cryptobtc", "_isol", "_knights", "language", "_rr34", "_sperg", "_awaken", "_belgium", "_blizzard", "_brain",
+         "buddha", "_dbs", "_deestevensvoice4you", "_f4net", "_fuckuchina", "_gbtv", "hairygirls", "_hallaca",
+         "_homeowner", "indo", "_jersey", "_jigglypuff", "_lbt", "_madh4ckrs", "_medcorp", "_miamichan", "mrsfrisby",
+         "_mulatto", "_mupro", "_nhoodlink", "_p5porn", "_patriotrevolution", "_peko", "_projectobject", "_prop",
+         "pups", "_qanonspain", "_qcastellano", "qsocial", "_resist", "_revolu", "_skemt", "_sketheory", "_spaceforce",
+         "_surro", "_thehand", "_transit", "_vitaecryptocurrency", "qsocial", "_resist", "_revolu", "_skemt",
+         "_sketheory", "_spaceforce", "_surro", "_thehand", "_transit", "_vitaecryptocurrency", "midnightriders",
+         "tingles", "1cc", "prog", "ytc", "arcagayghetto", "prog", "ytc", "arcagayghetto", "2hu", "o", "warroom", "2hu",
+         "o", "warroom", "ebon", "xiaomicha", "ebon", "xiaomicha", "gnosticwarfare", "moldnet", "zenczan", "cosplay",
+         "otakus", "nohup", "frenzone", "8dixie", "hqa", "pundit", "vrgg", "uf0", "malaysia", "gnosticwarfare",
+         "moldnet", "zenczan", "cosplay", "otakus", "nohup", "frenzone", "8dixie", "hqa", "pundit", "vrgg", "uf0",
+         "malaysia", "instruments", "unlightopen", "pso2g", "jozsicsan", "komijoke", "bmsgeu", "92k", "komicaz", "pcal",
+         "accent", "wethepatriots", "porussia", "1a", "tarhana", "bigwomen", "maths", "instruments", "unlightopen",
+         "pso2g", "jozsicsan", "komijoke", "bmsgeu", "92k", "komicaz", "pcal", "accent", "wethepatriots", "porussia",
+         "1a", "tarhana", "bigwomen", "maths", "coffeetalk", "arcader", "kingcrimson", "moonlight", "trkey", "whogen",
+         "xivlgr", "amichan", "gendercritical", "inflg", "komicalol", "capcom", "coser", "cud", "feedism", "grc",
+         "reimuchan", "stalker2", "2020istheyear", "carib", "jumpchen", "mishmash", "qbl", "sakurachan", "satsukichan",
+         "taodick", "aes", "gacha", "nfl2", "redlands", "traditionalcatholics", "tsiou", "airsoft2", "animation",
+         "cafardchan", "chrstdis", "coffeetalk", "arcader", "kingcrimson", "moonlight", "trkey", "whogen", "xivlgr",
+         "amichan", "gendercritical", "inflg", "komicalol", "capcom", "coser", "cud", "feedism", "grc", "reimuchan",
+         "stalker2", "2020istheyear", "carib", "jumpchen", "mishmash", "qbl", "sakurachan", "satsukichan", "taodick",
+         "aes", "gacha", "nfl2", "redlands", "traditionalcatholics", "tsiou", "airsoft2", "animation", "cafardchan",
+         "chrstdis", "komicamc", "marista", "neetpride", "numis", "progmusic", "retrogaminggifs", "warcraft2004",
+         "komicamc", "marista", "neetpride", "numis", "progmusic", "retrogaminggifs", "warcraft2004"),
     ),
     "hispachan": HispachanHtmlHelper(
         30,
@@ -466,7 +455,6 @@ CHANS = {
             "cl", "co", "ec", "es", "mx", "pe", "py", "uy", "ve", "d",
             "h", "o", "s", "sar", "scl", "sco", "ses", "smx", "spe", "sve",
         ),
-        rps=1 / 20
     ),
     "sushigirl": JsonChanHelper(
         31,
@@ -478,7 +466,6 @@ CHANS = {
             "archive", "wildcard", "lounge", "arcade", "kawaii",
             "kitchen", "tunes", "culture", "silicon", "yakuza", "hell", "lewd"
         ),
-        rps=1 / 30
     ),
     "4kev": Kev4PhpHelper(
         32,
@@ -491,7 +478,6 @@ CHANS = {
             "politics", "programming", "random", "technology",
             "television", "videogames",
         ),
-        rps=1 / 20
     ),
     "plus4chan": Plus4ChanHelper(
         33,
@@ -503,7 +489,6 @@ CHANS = {
             "baw", "co", "cog", "jam", "mtv",
             "coc", "draw", "pco", "coq", "cod", "a"
         ),
-        rps=1 / 15
     ),
     "2chan": Chan2Helper(
         34,
@@ -628,7 +613,6 @@ CHANS = {
             "oe",  # ??? お絵sql
             "72",  # ??? お絵sqlip
         ),
-        rps=1 / 3
     ),
     "waifuist": LynxChanHelper(
         36,
@@ -639,7 +623,6 @@ CHANS = {
         (
             "w", "starlet", "etc",
         ),
-        rps=1 / 25
     ),
     "cutiegarden": LynxChanHelper(
         37,
@@ -650,7 +633,6 @@ CHANS = {
         (
             "lg", "cozy", "meta", "test"
         ),
-        rps=1 / 25
     ),
     "9chan": JsonInfinityNextChanHelper(
         38,
@@ -737,6 +719,5 @@ CHANS = {
          "politicallyincorrect", "hockey", "randb", "traps", "vichan", "ircsecrets", "bosartest111111", "chib",
          "testing1234fake", "mdma", "virgo", "homo", "scum", "anal", "gamerhatehq", "vagina", "dump", "advert",
          "jueggin", "kike", "type", "robot", "goodguys", "ween", "bankfraudaccountloading", "vhsch"),
-        rps=1 / 10
     ),
 }

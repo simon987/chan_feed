@@ -2,14 +2,13 @@ from bs4 import BeautifulSoup
 
 
 class ChanHelper:
-    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards, rps):
+    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards):
         self.db_id = db_id
         self._base_url = base_url
         self._image_url = image_url
         self._thread_path = thread_path
         self._image_path = image_path
         self._boards = boards
-        self.rps = rps
         self.get_method = None
         self.save_folder = None
 
@@ -37,7 +36,7 @@ class ChanHelper:
         raise NotImplementedError
 
     def item_unique_id(self, item, board):
-        return int(self.board_hash(board) + str(self.item_id(item)))
+        return board + str(self.item_id(item))
 
     @staticmethod
     def thread_mtime(thread):

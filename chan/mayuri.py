@@ -3,13 +3,13 @@ from json import JSONDecodeError
 
 from chan.helper import ChanHelper
 from post_process import get_links_from_body
-from util import logger
+from hexlib.log import logger
 
 
 class MayuriChanHelper(ChanHelper):
 
-    def __init__(self, db_id, base_url, image_url, boards, rps):
-        super().__init__(db_id, base_url, image_url, None, None, boards, rps)
+    def __init__(self, db_id, base_url, image_url, boards):
+        super().__init__(db_id, base_url, image_url, None, None, boards)
 
     @staticmethod
     def item_id(item):

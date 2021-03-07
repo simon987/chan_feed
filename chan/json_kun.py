@@ -1,7 +1,7 @@
 from vanwanet_scrape.scraper import Scraper
 
 from chan.chan_json import JsonChanHelper
-from util import logger
+from hexlib.log import logger
 
 
 class JsonKunChanHelper(JsonChanHelper):
@@ -10,8 +10,8 @@ class JsonKunChanHelper(JsonChanHelper):
     def item_type(item):
         return "thread" if item["resto"] == 0 else "post"
 
-    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards, rps):
-        super().__init__(db_id, base_url, image_url, thread_path, image_path, boards, rps)
+    def __init__(self, db_id, base_url, image_url, thread_path, image_path, boards):
+        super().__init__(db_id, base_url, image_url, thread_path, image_path, boards)
 
         self._scraper = Scraper(
             headers={
