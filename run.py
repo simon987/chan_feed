@@ -56,15 +56,6 @@ class ChanScanner:
                 yield post, board
 
 
-def once(func):
-    def wrapper(item, board, helper):
-        if not state.has_visited(helper.item_unique_id(item, board)):
-            func(item, board, helper)
-            state.mark_visited(helper.item_unique_id(item, board))
-
-    return wrapper
-
-
 class ChanState:
     def __init__(self, prefix):
         self._posts = VolatileBooleanState(prefix)
@@ -83,13 +74,10 @@ class ChanState:
 
         t = self._threads["threads"][helper.item_unique_id(thread, board)]
 
-        return not t or helper.thread_mtime(thread) != t["m"] or t["t"] + 86400 < int(time.time())
+        return not t or helper.thread_mtime(thread) != t
 
     def mark_thread_as_visited(self, thread, helper, board):
-        self._threads["threads"][helper.item_unique_id(thread, board)] = {
-            "t": int(time.time()),
-            "m": helper.thread_mtime(thread)
-        }
+        self._threads["threads"][helper.item_unique_id(thread, board)] = helper.thread_mtime(thread)
 
 
 def publish_worker(queue: Queue, helper):
@@ -100,7 +88,6 @@ def publish_worker(queue: Queue, helper):
             logger.error(str(e) + ": " + traceback.format_exc())
 
 
-@once
 def publish(item, board, helper):
     post_process(item, board, helper)
 

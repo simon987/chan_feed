@@ -35,7 +35,7 @@ class JsonChanHelper(ChanHelper):
 
     @staticmethod
     def thread_mtime(thread):
-        return thread["last_modified"]
+        return thread["last_modified"] if "last_modified" in thread else -1
 
     @staticmethod
     def parse_threads_list(r):
