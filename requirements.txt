@@ -4,7 +4,7 @@ stem
 influxdb
 bs4
 urllib3
-git+git://github.com/simon987/hexlib.git
 git+git://github.com/simon987/vanwanet_scrape.git
+git+git://github.com/simon987/hexlib.git
 cloudscraper
 redis

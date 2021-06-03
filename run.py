@@ -1,13 +1,12 @@
 import json
 import os
-import time
 import traceback
 from queue import Queue
 from threading import Thread
 
 from hexlib.concurrency import queue_iter
 from hexlib.db import VolatileBooleanState, VolatileState
-from hexlib.env import get_web, get_redis
+from hexlib.env import get_web, get_redis, redis_publish
 from hexlib.log import logger
 
 from chan.chan import CHANS
@@ -83,19 +82,18 @@ class ChanState:
 def publish_worker(queue: Queue, helper):
     for item, board in queue_iter(queue):
         try:
-            publish(item, board, helper)
+            post_process(item, board, helper)
+
+            redis_publish(
+                rdb,
+                item=json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True),
+                item_project="chan",
+                item_subproject=CHAN,
+                item_type=helper.item_type(item),
+                item_category=board
+            )
         except Exception as e:
             logger.error(str(e) + ": " + traceback.format_exc())
-
-
-def publish(item, board, helper):
-    post_process(item, board, helper)
-
-    item_type = helper.item_type(item)
-    routing_key = "%s.%s.%s" % (CHAN, item_type, board)
-
-    message = json.dumps(item, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
-    rdb.lpush("arc.chan2." + routing_key, message)
 
 
 if __name__ == "__main__":
